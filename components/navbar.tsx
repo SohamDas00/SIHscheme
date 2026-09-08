@@ -75,11 +75,10 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`transition-colors font-medium text-sm ${
-                  link.isActive
-                    ? "text-aurora-600 dark:text-aurora-400 font-semibold border-b-2 border-aurora-600 dark:border-aurora-400 pb-0.5"
-                    : "text-slate-600 dark:text-slate-300 hover:text-aurora-600 dark:hover:text-aurora-400"
-                }`}
+                className={`transition-colors font-medium text-sm ${link.isActive
+                  ? "text-aurora-600 dark:text-aurora-400 font-semibold border-b-2 border-aurora-600 dark:border-aurora-400 pb-0.5"
+                  : "text-slate-600 dark:text-slate-300 hover:text-aurora-600 dark:hover:text-aurora-400"
+                  }`}
               >
                 {link.name}
               </Link>
@@ -114,8 +113,12 @@ export function Navbar() {
                     <Image
                       src={currentUser.photo}
                       alt={currentUser.name}
-                      className="w-7 h-7 rounded-full border border-aurora-500 object-cover"
+                      width={36}  // 👈 Add this
+                      height={36} // 👈 Add this
+                      className="w-9 h-9 rounded-full border-2 border-aurora-500 object-cover"
+                      unoptimized
                     />
+
                   ) : (
                     <div className="w-7 h-7 rounded-full bg-aurora-500/20 text-aurora-400 flex items-center justify-center">
                       <User className="w-4 h-4" />
@@ -170,8 +173,12 @@ export function Navbar() {
                   <Image
                     src={currentUser.photo}
                     alt={currentUser.name}
+                    width={36}  // 👈 Add this
+                    height={36} // 👈 Add this
                     className="w-9 h-9 rounded-full border-2 border-aurora-500 object-cover"
+                    unoptimized
                   />
+
                 ) : (
                   <div className="w-9 h-9 rounded-full bg-aurora-500/20 text-aurora-400 flex items-center justify-center">
                     <User className="w-5 h-5" />
@@ -203,11 +210,10 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between text-sm py-2.5 px-3.5 rounded-lg transition-colors ${
-                  link.isActive
-                    ? "bg-slate-100 dark:bg-navy-800 text-aurora-600 dark:text-aurora-400 font-semibold border border-slate-200 dark:border-navy-700"
-                    : "text-slate-700 dark:text-slate-300 hover:text-aurora-600 dark:hover:text-aurora-400 hover:bg-slate-50 dark:hover:bg-navy-900/60 font-medium"
-                }`}
+                className={`flex items-center justify-between text-sm py-2.5 px-3.5 rounded-lg transition-colors ${link.isActive
+                  ? "bg-slate-100 dark:bg-navy-800 text-aurora-600 dark:text-aurora-400 font-semibold border border-slate-200 dark:border-navy-700"
+                  : "text-slate-700 dark:text-slate-300 hover:text-aurora-600 dark:hover:text-aurora-400 hover:bg-slate-50 dark:hover:bg-navy-900/60 font-medium"
+                  }`}
               >
                 <span>{link.name}</span>
                 {link.isActive && (

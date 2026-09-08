@@ -111,8 +111,11 @@ export default function LoginPage() {
                   <Image
                     src="https://www.gstatic.com/firebasejs/ui/logo/lock/google_landing_logo.svg"
                     alt="Google"
+                    width={20}
+                    height={20}  
                     className="w-5 h-5"
                   />
+
                   <span className="text-sm font-bold">Sign in with Google</span>
                 </>
               )}

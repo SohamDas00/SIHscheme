@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useTheme } from "@/components/theme-provider";
 import { isAuthenticated, logout, UserSessionData } from "@/lib/firebase";
+import Image from "next/image";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ export function Navbar() {
               <div className="hidden sm:flex items-center gap-3">
                 <div className="flex items-center gap-2.5 bg-slate-100 dark:bg-navy-800/80 py-1 px-3 rounded-full border border-slate-200 dark:border-navy-700 shadow-sm">
                   {currentUser.photo ? (
-                    <img
+                    <Image
                       src={currentUser.photo}
                       alt={currentUser.name}
                       className="w-7 h-7 rounded-full border border-aurora-500 object-cover"
@@ -166,7 +167,7 @@ export function Navbar() {
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-navy-800/80 border border-slate-200 dark:border-navy-700 mb-2">
               <div className="flex items-center gap-2.5">
                 {currentUser.photo ? (
-                  <img
+                  <Image
                     src={currentUser.photo}
                     alt={currentUser.name}
                     className="w-9 h-9 rounded-full border-2 border-aurora-500 object-cover"

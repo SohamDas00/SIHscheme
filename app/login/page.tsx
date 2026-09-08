@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Sparkles, Shield, CheckCircle2, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { signInWithGoogle, isAuthenticated } from "@/lib/firebase";
+import Image from "next/image";
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -107,7 +108,7 @@ export default function LoginPage() {
                 </>
               ) : (
                 <>
-                  <img
+                  <Image
                     src="https://www.gstatic.com/firebasejs/ui/logo/lock/google_landing_logo.svg"
                     alt="Google"
                     className="w-5 h-5"

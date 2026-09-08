@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eligibility Assessment — SchemeBridge</title>
+  <meta name="description"
+    content="Enter your financial requirements to evaluate eligible government welfare loan schemes.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            background: '#070b14',
+            card: '#0d1424',
+            border: 'rgba(255, 255, 255, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      background-color: #070b14;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glow-mesh {
+      background-image: radial-gradient(at 0% 0%, hsla(246, 80%, 60%, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(174, 90%, 50%, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, hsla(280, 80%, 60%, 0.08) 0px, transparent 50%);
+    }
+
+    .glass-card {
+      background: rgba(13, 20, 36, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+  <!-- Route Auth Protection -->
+  <script>
+    (function() {
+      const user = sessionStorage.getItem('user');
+      if (!user) {
+        window.location.href = '/login';
+      }
+    })();
+  </script>
+</head>
+
+<body
+  class="bg-background text-slate-100 antialiased selection:bg-indigo-500 selection:text-white min-h-screen flex flex-col glow-mesh">
+
+  <!-- ========================================================================= -->
+  <!-- 1. NAVBAR -->
+  <!-- ========================================================================= -->
+  <nav class="bg-navy-950/95 border-b border-navy-800 sticky top-0 z-50 backdrop-blur-md">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2 group">
+          <span class="text-2xl font-bold bg-gradient-to-r from-aurora-400 to-teal-400 bg-clip-text text-transparent group-hover:brightness-110 transition-all">
+            SchemeBridge
+          </span>
+          <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-aurora-500/10 text-aurora-300 border border-aurora-500/20 hidden sm:inline-block">
+            SIH AI
+          </span>
+        </a>
+        
+        <!-- Navigation Links (Desktop) -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/" class="text-slate-300 hover:text-aurora-400 transition-colors">Home</a>
+          <a href="/assessment" class="text-aurora-400 font-semibold transition-colors">Assessment</a>
+          <a href="/matched-scheme" class="text-slate-300 hover:text-aurora-400 transition-colors">Scheme</a>
+          <a href="/emi-calculator" class="text-slate-300 hover:text-aurora-400 transition-colors">EMI</a>
+          <a href="/partner-network" class="text-slate-300 hover:text-aurora-400 transition-colors">Partners</a>
+          <a href="/my-applications" class="text-slate-300 hover:text-aurora-400 transition-colors">
+            My Applications
+          </a>
+        </div>
+        
+        <!-- CTA Button & Mobile Toggle -->
+        <div class="flex items-center gap-3">
+          <button onclick="window.location.href='/assessment'" 
+                  class="bg-gradient-to-r from-aurora-600 to-teal-600 hover:from-aurora-700 hover:to-teal-700 text-white px-6 py-2.5 rounded-lg font-medium transition-all shadow-lg shadow-aurora-500/20 text-xs sm:text-sm cursor-pointer">
+            Start Assessment
+          </button>
+
+          <!-- Mobile Hamburger Button -->
+          <button onclick="toggleMobileNav()" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-aurora-400 hover:bg-navy-800 transition-colors">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="hidden md:hidden border-t border-navy-800 bg-navy-950/98 p-4 space-y-2">
+      <a href="/" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-aurora-400 hover:bg-navy-900 text-sm">Home</a>
+      <a href="/assessment" class="block py-2 px-3 rounded-lg text-aurora-400 font-semibold bg-navy-900 text-sm">Assessment</a>
+      <a href="/matched-scheme" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-aurora-400 hover:bg-navy-900 text-sm">Scheme</a>
+      <a href="/emi-calculator" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-aurora-400 hover:bg-navy-900 text-sm">EMI</a>
+      <a href="/partner-network" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-aurora-400 hover:bg-navy-900 text-sm">Partners</a>
+      <a href="/my-applications" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-aurora-400 hover:bg-navy-900 text-sm">My Applications</a>
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN CONTENT: ELIGIBILITY ASSESSMENT FORM ONLY -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 py-10 md:py-16">
+    <div class="max-w-2xl mx-auto px-4 space-y-8">
+
+      <!-- Stepper / Breadcrumbs -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-bold text-indigo-400 uppercase tracking-wider">Step 1 of 4: Applicant Profile</span>
+          <span class="font-mono">Next: Matched Scheme &amp; EMI</span>
+        </div>
+
+        <!-- Step Track -->
+        <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden flex">
+          <div class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-teal-400 w-1/4 rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- Quick Jump Navigation Bar -->
+      <div
+        class="glass-card rounded-xl p-2.5 border border-white/10 flex flex-wrap items-center justify-between gap-2 shadow-lg relative z-20">
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 font-semibold px-2">
+          <i data-lucide="compass" class="w-4 h-4 text-teal-400"></i>
+          <span>Quick Jump:</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5 text-xs font-medium">
+          <!-- 1. Assessment button -> stays on current page / scrolls to top (active) -->
+          <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;"
+            class="px-3 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 font-bold border border-teal-500/40 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer">
+            <span class="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse"></span>
+            <span>Assessment</span>
+          </a>
+
+          <!-- 2. Matched Scheme button -> navigates to /matched-scheme.html -->
+          <a href="/matched-scheme.html"
+            class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-indigo-500/20 hover:text-indigo-300 text-slate-300 border border-white/10 flex items-center gap-1.5 transition-all cursor-pointer group">
+            <span>Matched Scheme</span>
+            <i data-lucide="arrow-right"
+              class="w-3 h-3 text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-transform"></i>
+          </a>
+
+          <!-- 3. EMI Calculator button -> navigates to /emi-calculator.html -->
+          <a href="/emi-calculator.html"
+            class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 hover:text-purple-300 text-slate-300 border border-white/10 flex items-center gap-1.5 transition-all cursor-pointer group">
+            <span>EMI Calculator</span>
+            <i data-lucide="arrow-right"
+              class="w-3 h-3 text-slate-500 group-hover:text-purple-400 group-hover:translate-x-0.5 transition-transform"></i>
+          </a>
+
+          <!-- 4. Partner Network button -> navigates to /partner-network.html -->
+          <a href="/partner-network.html"
+            class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-300 text-slate-300 border border-white/10 flex items-center gap-1.5 transition-all cursor-pointer group">
+            <span>Partner Network</span>
+            <i data-lucide="arrow-right"
+              class="w-3 h-3 text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-transform"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Heading Area (NO Hero Section) -->
+      <div class="space-y-2 text-center sm:text-left">
+        <div
+          class="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs text-indigo-300">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-teal-400"></i>
+          <span>Ministry Concessional Lending Criteria</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+          Eligibility Assessment
+        </h1>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Provide your annual family income and credit requirement to calculate exact scheme coverage and subsidized
+          interest rates.
+        </p>
+      </div>
+
+      <!-- Assessment Card & Form (ONLY Collecting Requirements) -->
+      <div
+        class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden border border-white/10">
+
+        <div class="h-1.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-teal-400 absolute top-0 left-0">
+        </div>
+
+        <form id="assessmentForm" class="space-y-6">
+
+          <!-- 1. Annual Family Income Input -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label for="annualIncome"
+                class="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                <span>Annual Family Income (₹)</span>
+                <span class="text-red-400">*</span>
+              </label>
+              <span class="text-[11px] text-teal-400 font-mono">Limit: ≤ ₹5,00,000</span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute left-3.5 top-3 text-slate-400 font-bold text-sm">₹</span>
+              <input type="number" id="annualIncome" name="annualIncome" required min="1000" max="5000000"
+                placeholder="e.g. 250000"
+                class="w-full h-11 pl-8 pr-4 rounded-lg border border-navy-700 bg-navy-800 text-foreground placeholder:text-muted-foreground text-sm font-medium focus:border-aurora-500 focus:ring-1 focus:ring-aurora-500 focus:outline-none transition-all font-mono" />
+            </div>
+
+            <!-- Quick Chips for Income -->
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <span class="text-[11px] text-slate-400">Quick select:</span>
+              <button type="button" onclick="setIncome(150000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-aurora-600 hover:text-white transition-colors">₹1.50L</button>
+              <button type="button" onclick="setIncome(300000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-aurora-600 hover:text-white transition-colors">₹3.00L</button>
+              <button type="button" onclick="setIncome(500000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-aurora-600 hover:text-white transition-colors">₹5.00L
+                (Max)</button>
+              <button type="button" onclick="setIncome(750000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-red-600 hover:text-white transition-colors">₹7.50L</button>
+            </div>
+          </div>
+
+          <!-- 2. Loan Amount Needed Input -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label for="loanAmount" class="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                <span>Loan Amount Needed (₹)</span>
+                <span class="text-red-400">*</span>
+              </label>
+              <span class="text-[11px] text-aurora-400 font-mono">Up to ₹50,00,000</span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute left-3.5 top-3 text-slate-400 font-bold text-sm">₹</span>
+              <input type="number" id="loanAmount" name="loanAmount" required min="5000" max="5000000"
+                placeholder="e.g. 120000"
+                class="w-full h-11 pl-8 pr-4 rounded-lg border border-navy-700 bg-navy-800 text-foreground placeholder:text-muted-foreground text-sm font-medium focus:border-aurora-500 focus:ring-1 focus:ring-aurora-500 focus:outline-none transition-all font-mono" />
+            </div>
+
+            <!-- Quick Chips for Loan Amount -->
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <span class="text-[11px] text-slate-400">Quick select:</span>
+              <button type="button" onclick="setLoan(100000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-teal-600 hover:text-white transition-colors">₹1.00L
+                (Micro)</button>
+              <button type="button" onclick="setLoan(500000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-teal-600 hover:text-white transition-colors">₹5.00L</button>
+              <button type="button" onclick="setLoan(1500000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-teal-600 hover:text-white transition-colors">₹15.00L
+                (Term)</button>
+              <button type="button" onclick="setLoan(3000000)"
+                class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-navy-700 bg-navy-900/60 text-slate-300 hover:bg-teal-600 hover:text-white transition-colors">₹30.00L</button>
+            </div>
+          </div>
+
+          <!-- 3. Purpose of Loan Dropdown -->
+          <div class="space-y-2">
+            <label for="purpose" class="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+              <span>Purpose of Loan</span>
+              <span class="text-red-400">*</span>
+            </label>
+
+            <select id="purpose" name="purpose" onchange="handlePurposeChange(this.value)"
+              class="w-full h-11 px-3.5 rounded-lg border border-navy-700 bg-navy-800 text-foreground text-sm font-medium focus:border-aurora-500 focus:ring-1 focus:ring-aurora-500 focus:outline-none cursor-pointer transition-all">
+              <option value="Business">Business / Micro-Enterprise Financing</option>
+              <option value="Education">Higher Education &amp; Vocational Training</option>
+            </select>
+          </div>
+
+          <!-- 4A. Project Type Dropdown (If Business) -->
+          <div id="projectTypeContainer" class="space-y-2 animate-fade-in">
+            <label for="projectType" class="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+              <span>Business Project Scale</span>
+              <span class="text-slate-400 text-xs">(Determines Scheme Category)</span>
+            </label>
+
+            <select id="projectType" name="projectType"
+              class="w-full h-11 px-3.5 rounded-lg border border-navy-700 bg-navy-800 text-foreground text-sm font-medium focus:border-aurora-500 focus:ring-1 focus:ring-aurora-500 focus:outline-none cursor-pointer transition-all">
+              <option value="Small">Small (≤ ₹1.40 Lakhs - Micro Finance)</option>
+              <option value="Medium">Medium (₹1.40L to ₹10.00 Lakhs - Term Loan)</option>
+              <option value="Large">Large (₹10.00L to ₹50.00 Lakhs - Term Loan)</option>
+            </select>
+          </div>
+
+          <!-- 4B. Education Level Dropdown (If Education) -->
+          <div id="educationLevelContainer" class="space-y-2 hidden animate-fade-in">
+            <label for="educationLevel"
+              class="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+              <span>Education Level</span>
+              <span class="text-slate-400 text-xs">(Eligible for Moratorium)</span>
+            </label>
+
+            <select id="educationLevel" name="educationLevel"
+              class="w-full h-11 px-3.5 rounded-lg border border-navy-700 bg-navy-800 text-foreground text-sm font-medium focus:border-aurora-500 focus:ring-1 focus:ring-aurora-500 focus:outline-none cursor-pointer transition-all">
+              <option value="Undergraduate">Undergraduate Degree (B.Tech, B.Sc, B.Com)</option>
+              <option value="Postgraduate">Postgraduate Degree (M.Tech, MBA, M.Sc)</option>
+              <option value="Professional">Professional / Vocational Diploma</option>
+            </select>
+          </div>
+
+          <!-- Submit Action Button -->
+          <div class="pt-4">
+            <button type="submit"
+              class="w-full h-12 rounded-xl bg-gradient-to-r from-aurora-600 to-sunset-500 hover:from-aurora-700 hover:to-sunset-600 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-aurora-500/25 transition-all group">
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform"></i>
+              <span>Assess &amp; Match Eligible Schemes</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- Help & Disclaimer Card -->
+      <div class="p-4 rounded-xl border border-white/10 bg-white/5 text-xs text-slate-400 space-y-1">
+        <div class="flex items-center gap-1.5 text-slate-300 font-semibold">
+          <i data-lucide="info" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span>Statutory Rule:</span>
+        </div>
+        <p>
+          Government concessional loan programs mandate an annual family income threshold of ₹5,00,000. Eligible
+          applicants receive up to 90% project cost coverage with only 10% self-contribution margin.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 3. FOOTER -->
+  <!-- ========================================================================= -->
+  <footer class="border-t border-white/10 bg-[#070b14]/80 py-8 text-xs text-slate-400">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-white">SchemeBridge</span>
+        <span>• Smart India Hackathon AI Platform</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/" class="hover:text-white transition-colors">Home</a>
+        <a href="/assessment.html" class="hover:text-white text-teal-400 font-semibold">Assessment</a>
+        <a href="/matched-scheme.html" class="hover:text-white transition-colors">Matched Schemes</a>
+        <a href="/emi-calculator.html" class="hover:text-white transition-colors">EMI Calculator</a>
+        <a href="/partner-network.html" class="hover:text-white transition-colors">Partner Network</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- APPSTATE & FORM SUBMISSION LOGIC -->
+  <!-- ========================================================================= -->
+  <script src="/utils/state.js"></script>
+  <script>
+    // Quick Select Helpers
+    function setIncome(val) {
+      document.getElementById('annualIncome').value = val;
+    }
+
+    function setLoan(val) {
+      document.getElementById('loanAmount').value = val;
+    }
+
+    // Toggle Project Scale vs Education Level Dropdown
+    function handlePurposeChange(purpose) {
+      const projectContainer = document.getElementById('projectTypeContainer');
+      const eduContainer = document.getElementById('educationLevelContainer');
+
+      if (purpose === 'Education') {
+        projectContainer.classList.add('hidden');
+        eduContainer.classList.remove('hidden');
+      } else {
+        projectContainer.classList.remove('hidden');
+        eduContainer.classList.add('hidden');
+      }
+    }
+
+    // Handle Form Submit
+    document.getElementById('assessmentForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const income = parseFloat(document.getElementById('annualIncome').value);
+      const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+      const purpose = document.getElementById('purpose').value;
+      const projectType = document.getElementById('projectType').value;
+      const educationLevel = document.getElementById('educationLevel').value;
+
+      if (isNaN(income) || isNaN(loanAmount)) {
+        alert('Please enter valid income and loan amounts.');
+        return;
+      }
+
+      const assessmentData = {
+        income: income,
+        loanAmount: loanAmount,
+        purpose: purpose,
+        projectType: purpose === 'Business' ? projectType : undefined,
+        educationLevel: purpose === 'Education' ? educationLevel : undefined
+      };
+
+      // 1. Save all input data to sessionStorage using AppState.saveAssessment()
+      if (window.AppState) {
+        window.AppState.saveAssessment(assessmentData);
+      } else {
+        sessionStorage.setItem('schemebridge_assessment', JSON.stringify({
+          ...assessmentData,
+          timestamp: new Date().toISOString()
+        }));
+      }
+
+      // 2. Redirect to /matched-scheme.html
+      window.location.href = '/matched-scheme.html';
+    });
+
+    // Auto-fill form if existing assessment exists in sessionStorage
+    window.addEventListener('DOMContentLoaded', function () {
+      lucide.createIcons();
+
+      const existing = (window.AppState && window.AppState.getAssessment)
+        ? window.AppState.getAssessment()
+        : JSON.parse(sessionStorage.getItem('schemebridge_assessment') || '{}');
+
+      if (existing && existing.income) {
+        document.getElementById('annualIncome').value = existing.income;
+        document.getElementById('loanAmount').value = existing.loanAmount || '';
+        if (existing.purpose) {
+          document.getElementById('purpose').value = existing.purpose;
+          handlePurposeChange(existing.purpose);
+        }
+        if (existing.projectType) {
+          document.getElementById('projectType').value = existing.projectType;
+        }
+        if (existing.educationLevel) {
+          document.getElementById('educationLevel').value = existing.educationLevel;
+        }
+      }
+    });
+
+    function toggleMobileNav() {
+      const drawer = document.getElementById('mobileNavDrawer');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+  </script>
+
+</body>
+
+</html>

@@ -61,7 +61,7 @@ export function Navbar() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold bg-gradient-to-r from-aurora-600 via-teal-600 to-teal-700 dark:from-aurora-400 dark:via-teal-300 dark:to-teal-400 bg-clip-text text-transparent group-hover:brightness-110 transition-all">
-                SubhadipSchemeBridge
+                SchemeBridge
               </span>
               <Badge variant="glow" className="text-[10px] font-medium py-0 px-2 hidden sm:inline-flex border-aurora-500/30 text-aurora-600 dark:text-aurora-300 bg-aurora-500/10">
                 DesiDevs

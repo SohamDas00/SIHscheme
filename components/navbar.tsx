@@ -50,7 +50,7 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="bg-white/95 dark:bg-navy-950/95 border-b border-slate-200 dark:border-navy-800 sticky top-0 z-50 backdrop-blur-md transition-colors duration-200 shadow-sm dark:shadow-md dark:shadow-black/20">
+    <nav className="bg-white/95 dark:bg-navy-950/95 border-b border-slate-200 dark:border-navy-800 fixed top-0 left-0 right-0 z-50 backdrop-blur-md transition-colors duration-200 shadow-sm dark:shadow-md dark:shadow-black/20 w-full h-16 shrink-0">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
 
@@ -164,7 +164,7 @@ export function Navbar() {
 
       {/* 4. MOBILE NAVIGATION DRAWER */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 dark:border-navy-800 bg-white/98 dark:bg-navy-950/98 backdrop-blur-xl p-4 space-y-3 animate-fade-in shadow-2xl">
+        <div className="md:hidden border-t border-slate-200 dark:border-navy-800 bg-white/98 dark:bg-navy-950/98 backdrop-blur-xl p-4 space-y-3 animate-fade-in shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto">
           {/* User Profile in Mobile Drawer if logged in */}
           {currentUser && (
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-navy-800/80 border border-slate-200 dark:border-navy-700 mb-2">

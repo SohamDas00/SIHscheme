@@ -25,7 +25,7 @@ export default function RootLayout({
         <ThemeProvider>
           <I18nProvider>
             <Navbar />
-            <main className="flex-1 glow-mesh">{children}</main>
+            <main className="flex-1 glow-mesh pt-16">{children}</main>
             <Footer />
           </I18nProvider>
         </ThemeProvider>

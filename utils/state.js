@@ -19,6 +19,7 @@ export const AppState = {
           timestamp: new Date().toISOString()
         };
         sessionStorage.setItem(ASSESSMENT_KEY, JSON.stringify(payload));
+        sessionStorage.setItem('assessment', JSON.stringify(payload));
         return true;
       } catch (err) {
         console.error('[AppState] Error saving assessment:', err);
@@ -35,7 +36,7 @@ export const AppState = {
   getAssessment: function() {
     if (typeof window !== 'undefined' && window.sessionStorage) {
       try {
-        const raw = sessionStorage.getItem(ASSESSMENT_KEY);
+        const raw = sessionStorage.getItem(ASSESSMENT_KEY) || sessionStorage.getItem('assessment');
         return raw ? JSON.parse(raw) : null;
       } catch (err) {
         console.error('[AppState] Error reading assessment:', err);

@@ -3,11 +3,40 @@
  */
 
 export interface AssessmentData {
+  // Basic Financial Info
   income: number;
   loanAmount: number;
-  purpose: "Business" | "Education";
-  projectType?: "Small" | "Medium" | "Large";
-  educationLevel?: "Undergraduate" | "Postgraduate" | "Professional";
+
+  // Loan Purpose & Scale
+  primaryPurpose?: string;
+  businessScale?: string;
+
+  // Financial Liabilities & Banking
+  existingEmis?: number;
+  salaryBank?: string;
+  netSalary?: number;
+
+  // Professional & Stability
+  companyName?: string;
+  yearsAtJob?: string;
+  totalExperience?: string;
+
+  // Loan Details & Demographics
+  loanPurpose?: string;
+  pincode?: string;
+  residentialStatus?: string;
+  address?: string;
+
+  // Credit Score
+  creditScore?: string;
+
+  // DTI Ratio
+  dtiRatio?: number;
+
+  // Legacy/Derived fields
+  purpose?: "Business" | "Education" | string;
+  projectType?: "Small" | "Medium" | "Large" | string;
+  educationLevel?: "Undergraduate" | "Postgraduate" | "Professional" | string;
   timestamp?: string;
 }
 
@@ -51,16 +80,18 @@ export interface ApplicationRecord {
 export const AppState = {
   saveAssessment: (data: AssessmentData): void => {
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("schemebridge_assessment", JSON.stringify({
+      const payload = {
         ...data,
         timestamp: new Date().toISOString(),
-      }));
+      };
+      sessionStorage.setItem("schemebridge_assessment", JSON.stringify(payload));
+      sessionStorage.setItem("assessment", JSON.stringify(payload));
     }
   },
 
   getAssessment: (): AssessmentData | null => {
     if (typeof window !== "undefined") {
-      const stored = sessionStorage.getItem("schemebridge_assessment");
+      const stored = sessionStorage.getItem("schemebridge_assessment") || sessionStorage.getItem("assessment");
       if (stored) {
         try {
           return JSON.parse(stored);
@@ -180,8 +211,34 @@ export const AppState = {
   clearAll: (): void => {
     if (typeof window !== "undefined") {
       sessionStorage.removeItem("schemebridge_assessment");
+      sessionStorage.removeItem("assessment");
       sessionStorage.removeItem("schemebridge_matched_scheme");
+      sessionStorage.removeItem("creditDecision");
+      sessionStorage.removeItem("schemebridge_credit_decision");
     }
+  },
+
+  saveCreditDecision: (decision: any): void => {
+    if (typeof window !== "undefined") {
+      const payload = JSON.stringify(decision);
+      sessionStorage.setItem("creditDecision", payload);
+      sessionStorage.setItem("schemebridge_credit_decision", payload);
+    }
+  },
+
+  getCreditDecision: (): any | null => {
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("creditDecision") || sessionStorage.getItem("schemebridge_credit_decision");
+      if (stored) {
+        try {
+          return JSON.parse(stored);
+        } catch {
+          return null;
+        }
+      }
+    }
+    return null;
   }
 };
+
 

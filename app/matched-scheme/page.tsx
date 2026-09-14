@@ -15,11 +15,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppState, AssessmentData, MatchedSchemeData } from "@/lib/app-state";
 import { AuthGuard } from "@/components/auth-guard";
+import { executeCreditDecisionEngine, FinalCreditDecision, ApplicantCreditProfile } from "@/lib/credit-engine";
 
 export default function MatchedSchemePage() {
   const { t } = useTranslation();
   const [assessment, setAssessment] = useState<AssessmentData | null>(null);
   const [scheme, setScheme] = useState<MatchedSchemeData | null>(null);
+  const [creditDecision, setCreditDecision] = useState<FinalCreditDecision | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,18 +33,63 @@ export default function MatchedSchemePage() {
         loanAmount: 120000,
         purpose: "Business",
         projectType: "Small",
+        creditScore: "good"
       };
       AppState.saveAssessment(currentAssessment);
     }
 
     setAssessment(currentAssessment);
 
+    // Compute or retrieve credit underwriting decision
+    let decision = AppState.getCreditDecision();
+    if (!decision) {
+      const creditProfile: ApplicantCreditProfile = {
+        name: currentAssessment.companyName || "Applicant",
+        annualIncome: currentAssessment.income || 250000,
+        loanAmount: currentAssessment.loanAmount || 120000,
+        existingEmis: currentAssessment.existingEmis || 0,
+        netSalary: currentAssessment.netSalary || Math.round((currentAssessment.income || 250000) / 12),
+        salaryBank: currentAssessment.salaryBank,
+        primaryPurpose: currentAssessment.primaryPurpose,
+        businessScale: currentAssessment.businessScale,
+        loanPurpose: currentAssessment.loanPurpose,
+        yearsAtJob: currentAssessment.yearsAtJob,
+        totalExperience: currentAssessment.totalExperience,
+        residentialStatus: currentAssessment.residentialStatus,
+        pincode: currentAssessment.pincode,
+        creditScore: currentAssessment.creditScore || "no-history"
+      };
+      decision = executeCreditDecisionEngine(creditProfile);
+      AppState.saveCreditDecision(decision);
+    }
+    setCreditDecision(decision);
+
     const { income, loanAmount, purpose, projectType } = currentAssessment;
 
     let evalScheme: MatchedSchemeData;
 
-    // Rule 1: Income Eligibility Ceiling check
-    if (income > 500000) {
+    // Rule 1: Knockout / Income Ceiling check / Credit decline
+    if (decision && decision.decision === "DECLINE") {
+      evalScheme = {
+        isEligible: false,
+        schemeName: "Ineligible for Concessional Credit",
+        interestRate: 0,
+        interestRateText: "N/A",
+        maxLoanAmount: 0,
+        maxLoanText: "₹0",
+        govtCoveragePercent: 0,
+        promoterMarginPercent: 0,
+        govtShareAmount: 0,
+        promoterMarginAmount: 0,
+        totalProjectCost: loanAmount,
+        fundingRatio: "0:0",
+        description: "",
+        moratoriumAvailable: false,
+        ineligibleReason: decision.userMessage || (income > 500000 
+          ? `Your annual family income of ₹${income.toLocaleString("en-IN")} exceeds the statutory ceiling limit of ₹5,00,000.`
+          : "Application does not meet institutional credit underwriting threshold."),
+      };
+    } else if (income > 500000) {
       evalScheme = {
         isEligible: false,
         schemeName: "Ineligible for Concessional Credit",
@@ -68,8 +115,8 @@ export default function MatchedSchemePage() {
         evalScheme = {
           isEligible: true,
           schemeName: "Micro Finance Scheme (Small / Artisan)",
-          interestRate: 6.5,
-          interestRateText: "6.5% p.a.",
+          interestRate: decision?.interestRate || 6.5,
+          interestRateText: `${decision?.interestRate || 6.5}% p.a.`,
           maxLoanAmount: 140000,
           maxLoanText: "Up to ₹1.40 Lakhs",
           govtCoveragePercent: 90,
@@ -88,8 +135,8 @@ export default function MatchedSchemePage() {
         evalScheme = {
           isEligible: true,
           schemeName: "National Concessional Term Loan Scheme",
-          interestRate: 7.5,
-          interestRateText: "7.5% p.a.",
+          interestRate: decision?.interestRate || 7.5,
+          interestRateText: `${decision?.interestRate || 7.5}% p.a.`,
           maxLoanAmount: 5000000,
           maxLoanText: "Up to ₹50.00 Lakhs",
           govtCoveragePercent: 90,
@@ -109,8 +156,8 @@ export default function MatchedSchemePage() {
       evalScheme = {
         isEligible: true,
         schemeName: "Subsidized Education Loan Scheme",
-        interestRate: 6.5,
-        interestRateText: "6.5% p.a.",
+        interestRate: decision?.interestRate || 6.5,
+        interestRateText: `${decision?.interestRate || 6.5}% p.a.`,
         maxLoanAmount: 2000000,
         maxLoanText: "Up to ₹20.00 Lakhs (In India)",
         govtCoveragePercent: 90,
@@ -129,6 +176,7 @@ export default function MatchedSchemePage() {
     AppState.saveScheme(evalScheme);
     setLoading(false);
   }, []);
+
 
   if (loading || !assessment || !scheme) {
     return (
@@ -207,27 +255,56 @@ export default function MatchedSchemePage() {
           </div>
         </div>
 
-        {/* CASE A: INELIGIBLE ERROR CARD */}
+        {/* CASE A: INELIGIBLE ERROR CARD / ADVERSE ACTION */}
         {!scheme.isEligible ? (
-          <Card className="border-2 border-destructive bg-destructive/10 backdrop-blur-md shadow-2xl p-8 space-y-6">
+          <Card className="border-2 border-destructive bg-destructive/10 backdrop-blur-md shadow-2xl p-6 sm:p-8 space-y-6">
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-2xl bg-destructive/20 text-destructive border border-destructive">
                 <XCircle className="h-8 w-8" />
               </div>
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-2 bg-destructive/20 border border-destructive text-destructive px-4 py-1.5 rounded-full text-xs font-bold">
-                  {t("Statutory Limit Exceeded")}
+                  {creditDecision?.flag === "RED" ? "❌ Underwriting Auto-Decline" : "✗ Statutory Limit Exceeded"}
                 </div>
-                <h2 className="text-2xl font-bold text-foreground">{t("Not Eligible for Concessional Lending")}</h2>
+                <h2 className="text-2xl font-bold text-foreground">
+                  {creditDecision?.flag === "RED" ? "Application Declined by Credit Policy" : t("Not Eligible for Concessional Lending")}
+                </h2>
                 <p className="text-sm text-muted-foreground">{scheme.ineligibleReason}</p>
               </div>
             </div>
+
+            {/* Adverse Action Breakdown */}
+            {creditDecision?.adverseAction && (
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-destructive/30 space-y-3 text-xs">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span className="font-bold text-destructive uppercase tracking-wider">
+                    📋 Adverse Action Notice (Fair Lending Disclosure)
+                  </span>
+                  <span className="text-[11px] text-amber-400 font-mono">
+                    Cooldown: {creditDecision.adverseAction.cooldownPeriod}
+                  </span>
+                </div>
+                <div className="space-y-1.5">
+                  <span className="text-slate-300 font-semibold block">Primary Underwriting Negative Factors:</span>
+                  <ul className="space-y-1 text-slate-400">
+                    {creditDecision.adverseAction.top3Reasons.map((reason, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-red-400 font-bold">•</span>
+                        <span>{reason}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
 
             <div className="p-4 rounded-xl bg-slate-100 dark:bg-navy-900/60 border border-slate-200 dark:border-navy-700 text-xs space-y-2 font-mono">
               <span className="font-bold text-foreground uppercase tracking-wider block">{t("Submitted on")}</span>
               <div className="grid grid-cols-2 gap-2 text-muted-foreground">
                 <div>{t("Annual Income")}: <strong className="text-foreground">₹{assessment.income.toLocaleString("en-IN")}</strong></div>
                 <div>{t("Loan Amount")}: <strong className="text-foreground">₹{assessment.loanAmount.toLocaleString("en-IN")}</strong></div>
+                <div>{t("Credit Score")}: <strong className="text-foreground uppercase">{assessment.creditScore || "N/A"}</strong></div>
+                <div>{t("Existing EMIs")}: <strong className="text-foreground">₹{(assessment.existingEmis || 0).toLocaleString("en-IN")}/mo</strong></div>
               </div>
             </div>
 
@@ -248,7 +325,7 @@ export default function MatchedSchemePage() {
             {/* Header & Badges */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-navy-700 pb-6">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <div className="inline-flex items-center gap-2 bg-teal-50 dark:bg-teal-900/50 border border-teal-200 dark:border-teal-700 text-teal-700 dark:text-teal-300 px-4 py-2 rounded-full text-sm font-medium">
                     <span className="h-2 w-2 rounded-full bg-teal-500 mr-0.5 inline-block animate-pulse" />
                     ✓ {t("AI Match Verified")}
@@ -256,6 +333,18 @@ export default function MatchedSchemePage() {
                   <div className="inline-flex items-center gap-2 bg-aurora-50 dark:bg-aurora-900/50 border border-aurora-200 dark:border-aurora-700 text-aurora-700 dark:text-aurora-300 px-3 py-1.5 rounded-full text-xs font-semibold font-mono">
                     {t("90:10 Ratio")}
                   </div>
+                  {creditDecision && (
+                    <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border font-mono ${
+                      creditDecision.flag === "GREEN" 
+                        ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40" 
+                        : creditDecision.flag === "AMBER" 
+                        ? "bg-amber-500/20 text-amber-400 border-amber-500/40" 
+                        : "bg-orange-500/20 text-orange-400 border-orange-500/40"
+                    }`}>
+                      <span className="h-1.5 w-1.5 rounded-full bg-current animate-ping" />
+                      Score: {creditDecision.score}/100 ({creditDecision.riskCategory})
+                    </div>
+                  )}
                 </div>
 
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight pt-1">
@@ -277,6 +366,21 @@ export default function MatchedSchemePage() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               {scheme.description}
             </p>
+
+            {/* Credit Engine Haircut / Counter-Offer Alert if applicable */}
+            {creditDecision?.counterOffer && (
+              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5 text-xs">
+                <span className="font-bold text-amber-400 uppercase tracking-wider block">
+                  ⚠️ FOIR Debt Sizing Counter-Offer Applied
+                </span>
+                <p className="text-slate-300">
+                  {creditDecision.counterOffer.reason}. Maximum approved ticket is capped at{" "}
+                  <strong className="text-white font-mono">
+                    ₹{creditDecision.counterOffer.approvedAmount.toLocaleString("en-IN")}
+                  </strong>.
+                </p>
+              </div>
+            )}
 
             {/* 4-Metric Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

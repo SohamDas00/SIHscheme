@@ -11,6 +11,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { useTheme } from "@/components/theme-provider";
 import { isAuthenticated, logout, UserSessionData } from "@/lib/firebase";
 import Image from "next/image";
+import { BrandIcon } from "@/components/brand-icon";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -55,10 +56,8 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           {/* 1. LOGO */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-aurora-600 via-purple-600 to-teal-500 text-white shadow-md shadow-aurora-500/25 group-hover:scale-105 transition-transform">
-              <Sparkles className="h-4.5 w-4.5 text-amber-300" />
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+            <BrandIcon className="h-9 w-auto group-hover:scale-105 transition-transform" />
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold bg-gradient-to-r from-aurora-600 via-teal-600 to-teal-700 dark:from-aurora-400 dark:via-teal-300 dark:to-teal-400 bg-clip-text text-transparent group-hover:brightness-110 transition-all">
                 SchemeBridge

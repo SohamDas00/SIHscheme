@@ -145,6 +145,31 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
+
+    /* Smooth transition for conditional fields */
+    #educationCategoryContainer,
+    #businessTypeContainer,
+    #personalReasonContainer,
+    #otherPurposeContainer {
+      transition: all 0.3s ease-in-out;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+
+    /* Hide utility */
+    .hidden {
+      display: none !important;
+    }
   </style>
   <!-- Route Auth Protection -->
   <script>
@@ -451,44 +476,124 @@
             </div>
           </div>
 
-          <!-- SECTION 2: Loan Purpose & Business Scale -->
-          <div class="mb-8 p-6 bg-navy-800/50 border border-navy-700 rounded-xl">
+          <!-- SECTION 2: Loan Purpose -->
+          <div class="mb-8 p-6 bg-navy-800/50 border border-navy-700 rounded-xl space-y-6">
             <h2 id="loan-purpose" class="text-2xl font-bold text-white mb-6">
-              🎯 Loan Purpose & Business Scale
+              🎯 Loan Purpose
             </h2>
             
             <!-- Primary Loan Purpose -->
-            <div class="mb-6">
-              <label class="block text-white font-medium mb-2">
-                Primary Loan Purpose
-                <span class="text-red-400 text-sm font-normal ml-2">*</span>
+            <div>
+              <label for="loanPurpose" class="block text-sm font-medium text-muted-foreground mb-2">
+                Primary Loan Purpose *
               </label>
-              <select id="primaryPurpose" required class="w-full bg-navy-800 border border-navy-700 rounded-lg px-4 py-3 text-white focus:border-aurora-500 focus:ring-2 focus:ring-aurora-500 transition-all">
-                <option value="">Select primary purpose</option>
-                <option value="business">Business</option>
+              <select 
+                id="loanPurpose" 
+                name="loanPurpose" 
+                required
+                class="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-aurora-500 focus:border-transparent transition-all"
+                onchange="handleLoanPurposeChange()"
+              >
+                <option value="">Select Purpose</option>
                 <option value="education">Education</option>
-                <option value="personal">Personal</option>
+                <option value="business">Business / Self-Employment</option>
+                <option value="personal">Personal Reasons</option>
+                <option value="other">Other</option>
               </select>
-              <p class="text-muted-foreground text-xs mt-2">
-                🎯 This determines which government schemes you're eligible for
-              </p>
             </div>
             
-            <!-- Business Scale -->
-            <div class="mb-4">
-              <label class="block text-white font-medium mb-2">
-                Business Scale
-                <span class="text-red-400 text-sm font-normal ml-2">*</span>
+            <!-- Education Project Size (Conditional) -->
+            <div id="educationCategoryContainer" class="hidden">
+              <!-- Project Size for Education -->
+              <label for="educationProjectSize" class="block text-sm font-medium text-muted-foreground mb-2">
+                Project Size *
               </label>
-              <select id="businessScale" required class="w-full bg-navy-800 border border-navy-700 rounded-lg px-4 py-3 text-white focus:border-aurora-500 focus:ring-2 focus:ring-aurora-500 transition-all">
-                <option value="">Select business scale</option>
-                <option value="micro">Micro (≤₹1.4L)</option>
-                <option value="small">Small (₹1.4L - ₹10L)</option>
-                <option value="medium">Medium (₹10L - ₹50L)</option>
-                <option value="large">Large (>₹50L)</option>
+              <select 
+                id="educationProjectSize" 
+                name="educationProjectSize"
+                class="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-aurora-500 focus:border-transparent transition-all"
+              >
+                <option value="">Select Project Size</option>
+                <option value="micro">Micro (Up to ₹1.40 Lakh) - Diploma, Certificate, Short-term Courses</option>
+                <option value="medium">Medium (₹1.40 Lakh - ₹10 Lakh) - Undergraduate, Postgraduate, Professional Courses</option>
+                <option value="large">Large (₹10 Lakh - ₹50 Lakh) - Ph.D., Study Abroad, Research Programs</option>
               </select>
-              <p class="text-muted-foreground text-xs mt-2">
-                📊 Based on your loan amount and business size
+              <p class="text-xs text-muted-foreground mt-2">
+                💡 Select based on your total education expense requirement
+              </p>
+            </div>
+
+            <!-- Business Project Size (Conditional) -->
+            <div id="businessTypeContainer" class="hidden">
+              <!-- Project Size for Business -->
+              <label for="businessProjectSize" class="block text-sm font-medium text-muted-foreground mb-2">
+                Project Size *
+              </label>
+              <select 
+                id="businessProjectSize" 
+                name="businessProjectSize"
+                class="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-aurora-500 focus:border-transparent transition-all"
+              >
+                <option value="">Select Project Size</option>
+                <option value="micro">Micro (Up to ₹1.40 Lakh) - Small business, working capital, equipment purchase</option>
+                <option value="medium">Medium (₹1.40 Lakh - ₹10 Lakh) - Business expansion, machinery, inventory</option>
+                <option value="large">Large (₹10 Lakh - ₹50 Lakh) - Large-scale manufacturing, infrastructure, franchise</option>
+              </select>
+              <p class="text-xs text-muted-foreground mt-2">
+                💡 Micro: Small projects (Micro Finance Scheme) | Medium/Large: Term Loan Scheme
+              </p>
+            </div>
+
+            <!-- Personal Project Size (Conditional) -->
+            <div id="personalReasonContainer" class="hidden">
+              <!-- Project Size for Personal -->
+              <label for="personalProjectSize" class="block text-sm font-medium text-muted-foreground mb-2">
+                Loan Size *
+              </label>
+              <select 
+                id="personalProjectSize" 
+                name="personalProjectSize"
+                class="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-aurora-500 focus:border-transparent transition-all"
+              >
+                <option value="">Select Loan Size</option>
+                <option value="micro">Micro (Up to ₹1 Lakh) - Small personal needs, consumer durables</option>
+                <option value="medium">Medium (₹1 Lakh - ₹5 Lakh) - Medical, wedding, vehicle purchase</option>
+                <option value="large">Large (₹5 Lakh+) - Major expenses, debt consolidation, home renovation</option>
+              </select>
+              <p class="text-xs text-muted-foreground mt-2">
+                💡 Select based on your total loan requirement
+              </p>
+            </div>
+
+            <!-- Other Purpose (Conditional) -->
+            <div id="otherPurposeContainer" class="hidden">
+              <label for="otherPurposeText" class="block text-sm font-medium text-muted-foreground mb-2">
+                Specify Other Purpose *
+              </label>
+              <input 
+                type="text" 
+                id="otherPurposeText" 
+                name="otherPurposeText"
+                placeholder="e.g., Starting a coaching center, Buying agricultural equipment, etc."
+                class="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-aurora-500 focus:border-transparent transition-all mb-4"
+              />
+              
+              <!-- Project Size for Other -->
+              <label for="otherProjectSize" class="block text-sm font-medium text-muted-foreground mb-2">
+                Project Size *
+              </label>
+              <select 
+                id="otherProjectSize" 
+                name="otherProjectSize"
+                class="w-full px-4 py-3 bg-navy-900 border border-navy-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-aurora-500 focus:border-transparent transition-all"
+              >
+                <option value="">Select Project Size</option>
+                <option value="micro">Micro (Up to ₹1.40 Lakh) - Small projects</option>
+                <option value="medium">Medium (₹1.40 Lakh - ₹10 Lakh) - Medium-scale projects</option>
+                <option value="large">Large (₹10 Lakh - ₹50 Lakh) - Large-scale projects</option>
+              </select>
+              <p class="text-xs text-muted-foreground mt-2">
+                💡 Select based on your total project cost
               </p>
             </div>
           </div>
@@ -628,35 +733,11 @@
             </div>
           </div>
 
-          <!-- SECTION 5: Loan Purpose & Residential Demographics -->
+          <!-- SECTION 5: Residential Demographics -->
           <div class="mb-8 p-6 bg-navy-800/50 border border-navy-700 rounded-xl">
             <h2 id="loan-demographics" class="text-2xl font-bold text-white mb-6">
-              📌 Loan Purpose & Residential Demographics
+              📌 Residential Demographics
             </h2>
-            
-            <!-- Specific Loan Purpose -->
-            <div class="mb-6">
-              <label class="block text-white font-medium mb-2">
-                Specific Loan Purpose
-                <span class="text-red-400 text-sm font-normal ml-2">*</span>
-              </label>
-              <select id="loanPurpose" required class="w-full bg-navy-800 border border-navy-700 rounded-lg px-4 py-3 text-white focus:border-aurora-500 focus:ring-2 focus:ring-aurora-500 transition-all">
-                <option value="">Select purpose</option>
-                <option value="business-expansion">Business Expansion</option>
-                <option value="working-capital">Working Capital</option>
-                <option value="equipment">Equipment Purchase</option>
-                <option value="inventory">Inventory Purchase</option>
-                <option value="education">Higher Education</option>
-                <option value="medical">Medical Emergency</option>
-                <option value="wedding">Wedding</option>
-                <option value="home-renovation">Home Renovation</option>
-                <option value="debt-consolidation">Debt Consolidation</option>
-                <option value="other">Other</option>
-              </select>
-              <p class="text-muted-foreground text-xs mt-2">
-                🎯 Different purposes have different risk profiles and interest rates
-              </p>
-            </div>
             
             <!-- Current Pincode -->
             <div class="mb-6">
@@ -813,21 +894,115 @@
       document.getElementById('loanAmount').value = val;
     }
 
+    // Handle Loan Purpose Change
+    function handleLoanPurposeChange() {
+      const loanPurposeEl = document.getElementById('loanPurpose');
+      if (!loanPurposeEl) return;
+      const loanPurpose = loanPurposeEl.value;
+      
+      // Hide all conditional containers
+      const eduContainer = document.getElementById('educationCategoryContainer');
+      const busContainer = document.getElementById('businessTypeContainer');
+      const perContainer = document.getElementById('personalReasonContainer');
+      const othContainer = document.getElementById('otherPurposeContainer');
+
+      if (eduContainer) eduContainer.classList.add('hidden');
+      if (busContainer) busContainer.classList.add('hidden');
+      if (perContainer) perContainer.classList.add('hidden');
+      if (othContainer) othContainer.classList.add('hidden');
+      
+      // Remove required attribute from all conditional fields
+      const allConditionalFields = [
+        'educationProjectSize',
+        'businessProjectSize',
+        'personalProjectSize',
+        'otherPurposeText', 'otherProjectSize'
+      ];
+      
+      allConditionalFields.forEach(id => {
+        document.getElementById(id)?.removeAttribute('required');
+      });
+      
+      // Show and set required based on selection
+      if (loanPurpose === 'education') {
+        if (eduContainer) eduContainer.classList.remove('hidden');
+        document.getElementById('educationProjectSize')?.setAttribute('required', 'required');
+      } else if (loanPurpose === 'business') {
+        if (busContainer) busContainer.classList.remove('hidden');
+        document.getElementById('businessProjectSize')?.setAttribute('required', 'required');
+      } else if (loanPurpose === 'personal') {
+        if (perContainer) perContainer.classList.remove('hidden');
+        document.getElementById('personalProjectSize')?.setAttribute('required', 'required');
+      } else if (loanPurpose === 'other') {
+        if (othContainer) othContainer.classList.remove('hidden');
+        document.getElementById('otherPurposeText')?.setAttribute('required', 'required');
+        document.getElementById('otherProjectSize')?.setAttribute('required', 'required');
+      }
+
+      if (typeof updateProgressBar === 'function') updateProgressBar();
+      if (typeof updateSidebarProgress === 'function') updateSidebarProgress();
+    }
+
     // Add form validation
     const form = document.getElementById('assessmentForm');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       
+      const loanPurpose = document.getElementById('loanPurpose').value;
+
+      // Validation: Ensure conditional fields and project sizes are selected
+      if (loanPurpose === 'education') {
+        if (!document.getElementById('educationProjectSize')?.value) {
+          alert('Please select your project size');
+          return;
+        }
+      }
+      if (loanPurpose === 'business') {
+        if (!document.getElementById('businessProjectSize')?.value) {
+          alert('Please select your project size');
+          return;
+        }
+      }
+      if (loanPurpose === 'personal') {
+        if (!document.getElementById('personalProjectSize')?.value) {
+          alert('Please select your loan size');
+          return;
+        }
+      }
+      if (loanPurpose === 'other') {
+        if (!document.getElementById('otherPurposeText')?.value.trim()) {
+          alert('Please specify your loan purpose');
+          return;
+        }
+        if (!document.getElementById('otherProjectSize')?.value) {
+          alert('Please select your project size');
+          return;
+        }
+      }
+
+      const selectedProjectSize = loanPurpose === 'education' 
+        ? document.getElementById('educationProjectSize')?.value 
+        : (loanPurpose === 'business' 
+          ? document.getElementById('businessProjectSize')?.value 
+          : (loanPurpose === 'personal' 
+            ? document.getElementById('personalProjectSize')?.value 
+            : (loanPurpose === 'other' ? document.getElementById('otherProjectSize')?.value : null)));
+
       // Collect all form data
       const assessmentData = {
         // Basic Financial Info
         income: parseFloat(document.getElementById('income').value) || 0,
         loanAmount: parseFloat(document.getElementById('loanAmount').value) || 0,
         
-        // Loan Purpose & Scale
-        primaryPurpose: document.getElementById('primaryPurpose').value,
-        businessScale: document.getElementById('businessScale').value,
+        // Loan Purpose & Conditional details
+        loanPurpose: loanPurpose,
+        primaryPurpose: loanPurpose,
+        educationProjectSize: loanPurpose === 'education' ? document.getElementById('educationProjectSize')?.value : null,
+        businessProjectSize: loanPurpose === 'business' ? document.getElementById('businessProjectSize')?.value : null,
+        personalProjectSize: loanPurpose === 'personal' ? document.getElementById('personalProjectSize')?.value : null,
+        otherPurposeText: loanPurpose === 'other' ? document.getElementById('otherPurposeText').value : null,
+        otherProjectSize: loanPurpose === 'other' ? document.getElementById('otherProjectSize')?.value : null,
         
         // Financial Liabilities & Banking
         existingEmis: parseFloat(document.getElementById('existingEmis').value) || 0,
@@ -839,8 +1014,7 @@
         yearsAtJob: document.getElementById('yearsAtJob').value,
         totalExperience: document.getElementById('totalExperience').value,
         
-        // Loan Details & Demographics
-        loanPurpose: document.getElementById('loanPurpose').value,
+        // Residential Demographics
         pincode: document.getElementById('pincode').value,
         residentialStatus: document.getElementById('residentialStatus').value,
         address: document.getElementById('address').value,
@@ -849,9 +1023,9 @@
         creditScore: document.getElementById('creditScore').value,
 
         // Backward compatibility helpers
-        purpose: (document.getElementById('primaryPurpose').value === 'education' || document.getElementById('loanPurpose').value === 'education') ? 'Education' : 'Business',
-        projectType: document.getElementById('businessScale').value || (document.getElementById('loanAmount').value <= 140000 ? 'Small' : document.getElementById('loanAmount').value <= 1000000 ? 'Medium' : 'Large'),
-        educationLevel: (document.getElementById('primaryPurpose').value === 'education' || document.getElementById('loanPurpose').value === 'education') ? 'Undergraduate' : undefined
+        purpose: loanPurpose === 'education' ? 'Education' : (loanPurpose === 'business' ? 'Business' : (loanPurpose === 'personal' ? 'Personal' : 'Other')),
+        projectType: selectedProjectSize === 'micro' ? 'Small' : (selectedProjectSize === 'medium' ? 'Medium' : (selectedProjectSize === 'large' ? 'Large' : (parseFloat(document.getElementById('loanAmount').value) <= 140000 ? 'Small' : parseFloat(document.getElementById('loanAmount').value) <= 1000000 ? 'Medium' : 'Large'))),
+        educationLevel: loanPurpose === 'education' ? (document.getElementById('educationCategory')?.value || 'Undergraduate') : undefined
       };
       
       // VALIDATION 1: Net Take-Home Salary vs Annual Income
@@ -1020,19 +1194,32 @@
       if (existing) {
         if (existing.income && document.getElementById('income')) document.getElementById('income').value = existing.income;
         if (existing.loanAmount && document.getElementById('loanAmount')) document.getElementById('loanAmount').value = existing.loanAmount;
-        if (existing.primaryPurpose && document.getElementById('primaryPurpose')) document.getElementById('primaryPurpose').value = existing.primaryPurpose;
-        if (existing.businessScale && document.getElementById('businessScale')) document.getElementById('businessScale').value = existing.businessScale;
+        if (existing.loanPurpose && document.getElementById('loanPurpose')) {
+          document.getElementById('loanPurpose').value = existing.loanPurpose;
+        } else if (existing.primaryPurpose && document.getElementById('loanPurpose')) {
+          document.getElementById('loanPurpose').value = existing.primaryPurpose;
+        }
+        handleLoanPurposeChange();
+        if (existing.educationCategory && document.getElementById('educationCategory')) document.getElementById('educationCategory').value = existing.educationCategory;
+        if (existing.educationProjectSize && document.getElementById('educationProjectSize')) document.getElementById('educationProjectSize').value = existing.educationProjectSize;
+        if (existing.businessType && document.getElementById('businessType')) document.getElementById('businessType').value = existing.businessType;
+        if (existing.businessProjectSize && document.getElementById('businessProjectSize')) document.getElementById('businessProjectSize').value = existing.businessProjectSize;
+        if (existing.personalReason && document.getElementById('personalReason')) document.getElementById('personalReason').value = existing.personalReason;
+        if (existing.personalProjectSize && document.getElementById('personalProjectSize')) document.getElementById('personalProjectSize').value = existing.personalProjectSize;
+        if (existing.otherPurposeText && document.getElementById('otherPurposeText')) document.getElementById('otherPurposeText').value = existing.otherPurposeText;
+        if (existing.otherProjectSize && document.getElementById('otherProjectSize')) document.getElementById('otherProjectSize').value = existing.otherProjectSize;
         if (existing.existingEmis !== undefined && document.getElementById('existingEmis')) document.getElementById('existingEmis').value = existing.existingEmis;
         if (existing.salaryBank && document.getElementById('salaryBank')) document.getElementById('salaryBank').value = existing.salaryBank;
         if (existing.netSalary !== undefined && document.getElementById('netSalary')) document.getElementById('netSalary').value = existing.netSalary;
         if (existing.companyName && document.getElementById('companyName')) document.getElementById('companyName').value = existing.companyName;
         if (existing.yearsAtJob && document.getElementById('yearsAtJob')) document.getElementById('yearsAtJob').value = existing.yearsAtJob;
         if (existing.totalExperience && document.getElementById('totalExperience')) document.getElementById('totalExperience').value = existing.totalExperience;
-        if (existing.loanPurpose && document.getElementById('loanPurpose')) document.getElementById('loanPurpose').value = existing.loanPurpose;
         if (existing.pincode && document.getElementById('pincode')) document.getElementById('pincode').value = existing.pincode;
         if (existing.residentialStatus && document.getElementById('residentialStatus')) document.getElementById('residentialStatus').value = existing.residentialStatus;
         if (existing.address && document.getElementById('address')) document.getElementById('address').value = existing.address;
         if (existing.creditScore && document.getElementById('creditScore')) document.getElementById('creditScore').value = existing.creditScore;
+      } else {
+        handleLoanPurposeChange();
       }
       
       const netSalaryInput = document.getElementById('netSalary');

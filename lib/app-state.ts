@@ -10,6 +10,14 @@ export interface AssessmentData {
   // Loan Purpose & Scale
   primaryPurpose?: string;
   businessScale?: string;
+  educationCategory?: string;
+  educationProjectSize?: string;
+  businessType?: string;
+  businessProjectSize?: string;
+  personalReason?: string;
+  personalProjectSize?: string;
+  otherPurposeText?: string;
+  otherProjectSize?: string;
 
   // Financial Liabilities & Banking
   existingEmis?: number;

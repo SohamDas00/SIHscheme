@@ -794,3 +794,59 @@ export function executeCreditDecisionEngine(applicant: ApplicantCreditProfile): 
 
   return finalDecision;
 }
+
+export function mapProjectSizeToScheme(loanPurpose: string, projectSize?: string, loanAmount: number = 0): { scheme: string; category: string } {
+  let recommendedScheme = '';
+  let schemeCategory = '';
+  
+  if (loanPurpose === 'business') {
+    if (projectSize === 'micro' || loanAmount <= 140000) {
+      recommendedScheme = 'Micro Credit Finance (MCF)';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium' || loanAmount <= 1000000) {
+      recommendedScheme = 'Term Loan (NSFDC)';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Term Loan (NSFDC) - Large';
+      schemeCategory = 'LARGE';
+    }
+  } else if (loanPurpose === 'education') {
+    if (projectSize === 'micro') {
+      recommendedScheme = 'Micro Credit Finance - Education';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium') {
+      recommendedScheme = 'Education Loan Scheme';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Education Loan Scheme - Higher Studies';
+      schemeCategory = 'LARGE';
+    }
+  } else if (loanPurpose === 'personal') {
+    if (projectSize === 'micro' || loanAmount <= 100000) {
+      recommendedScheme = 'Micro Credit Finance (Personal)';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium' || loanAmount <= 500000) {
+      recommendedScheme = 'Term Loan (Personal)';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Term Loan (Personal) - Large';
+      schemeCategory = 'LARGE';
+    }
+  } else {
+    if (projectSize === 'micro' || loanAmount <= 140000) {
+      recommendedScheme = 'Micro Credit Finance';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium' || loanAmount <= 1000000) {
+      recommendedScheme = 'Term Loan (NSFDC)';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Term Loan (NSFDC) - Large';
+      schemeCategory = 'LARGE';
+    }
+  }
+  
+  return {
+    scheme: recommendedScheme,
+    category: schemeCategory
+  };
+}

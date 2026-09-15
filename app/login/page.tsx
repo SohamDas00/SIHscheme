@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Sparkles, Shield, CheckCircle2, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { BrandIcon } from "@/components/brand-icon";
 import { signInWithGoogle, isAuthenticated } from "@/lib/firebase";
 import Image from "next/image";
 
@@ -70,8 +71,8 @@ export default function LoginPage() {
 
           {/* Logo & Header */}
           <div className="text-center space-y-2 pt-2">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-aurora-600 via-purple-600 to-teal-500 text-white shadow-lg shadow-aurora-500/30 mb-2">
-              <Sparkles className="h-6 w-6 text-amber-300" />
+            <div className="flex justify-center mb-2">
+              <BrandIcon className="h-12 w-auto" />
             </div>
             <h1 className="text-3xl font-extrabold bg-gradient-to-r from-aurora-400 via-teal-300 to-teal-400 bg-clip-text text-transparent">
               SchemeBridge

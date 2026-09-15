@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Sparkles, ArrowRight, ShieldCheck, MapPin, Calculator, Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
+import { BrandIcon } from "@/components/brand-icon";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -17,9 +18,7 @@ export function Footer() {
           {/* Brand & Mission Statement */}
           <div className="space-y-3 max-w-md">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-indigo-600 via-purple-600 to-teal-500 text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                <Sparkles className="h-4 w-4" />
-              </div>
+              <BrandIcon className="h-8 w-auto group-hover:scale-105 transition-transform" />
               <span className="font-extrabold text-base text-foreground tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                 SchemeBridge
               </span>

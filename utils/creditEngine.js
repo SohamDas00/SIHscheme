@@ -365,6 +365,62 @@ function validateExistingEMIs(netSalary, existingEmis) {
   return { valid: true };
 }
 
+function mapProjectSizeToScheme(loanPurpose, projectSize, loanAmount) {
+  let recommendedScheme = '';
+  let schemeCategory = '';
+  
+  if (loanPurpose === 'business') {
+    if (projectSize === 'micro' || loanAmount <= 140000) {
+      recommendedScheme = 'Micro Credit Finance (MCF)';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium' || loanAmount <= 1000000) {
+      recommendedScheme = 'Term Loan (NSFDC)';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Term Loan (NSFDC) - Large';
+      schemeCategory = 'LARGE';
+    }
+  } else if (loanPurpose === 'education') {
+    if (projectSize === 'micro') {
+      recommendedScheme = 'Micro Credit Finance - Education';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium') {
+      recommendedScheme = 'Education Loan Scheme';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Education Loan Scheme - Higher Studies';
+      schemeCategory = 'LARGE';
+    }
+  } else if (loanPurpose === 'personal') {
+    if (projectSize === 'micro' || loanAmount <= 100000) {
+      recommendedScheme = 'Micro Credit Finance (Personal)';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium' || loanAmount <= 500000) {
+      recommendedScheme = 'Term Loan (Personal)';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Term Loan (Personal) - Large';
+      schemeCategory = 'LARGE';
+    }
+  } else {
+    if (projectSize === 'micro' || loanAmount <= 140000) {
+      recommendedScheme = 'Micro Credit Finance';
+      schemeCategory = 'MICRO';
+    } else if (projectSize === 'medium' || loanAmount <= 1000000) {
+      recommendedScheme = 'Term Loan (NSFDC)';
+      schemeCategory = 'MEDIUM';
+    } else {
+      recommendedScheme = 'Term Loan (NSFDC) - Large';
+      schemeCategory = 'LARGE';
+    }
+  }
+  
+  return {
+    scheme: recommendedScheme,
+    category: schemeCategory
+  };
+}
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     validateNetSalary,
@@ -374,7 +430,8 @@ if (typeof module !== 'undefined' && module.exports) {
     calculateFOIR,
     calculateUnderwritingScore,
     executeFinalDecision,
-    executeCreditDecisionEngine
+    executeCreditDecisionEngine,
+    mapProjectSizeToScheme
   };
 }
 

@@ -284,7 +284,8 @@ export default function AssessmentPage() {
         barClass: "bg-gradient-to-r from-red-600 to-red-500 h-2.5 rounded-full transition-all duration-500 ease-out",
         displayColor: "text-red-500 dark:text-red-400",
         labelClass: "text-red-500 dark:text-red-400 text-xs font-medium",
-        labelText: "❌ Low Eligibility",
+        icon: "❌",
+        labelText: "Low Eligibility",
         badge: "Low (0-49)",
         badgeBg: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
       };
@@ -293,7 +294,8 @@ export default function AssessmentPage() {
         barClass: "bg-gradient-to-r from-yellow-600 to-orange-500 h-2.5 rounded-full transition-all duration-500 ease-out",
         displayColor: "text-amber-500 dark:text-yellow-400",
         labelClass: "text-amber-500 dark:text-yellow-400 text-xs font-medium",
-        labelText: "⚠️ Moderate Eligibility",
+        icon: "⚠️",
+        labelText: "Moderate Eligibility",
         badge: "Moderate (50-69)",
         badgeBg: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
       };
@@ -302,7 +304,8 @@ export default function AssessmentPage() {
         barClass: "bg-gradient-to-r from-lime-600 to-green-500 h-2.5 rounded-full transition-all duration-500 ease-out",
         displayColor: "text-emerald-500 dark:text-lime-400",
         labelClass: "text-emerald-500 dark:text-lime-400 text-xs font-medium",
-        labelText: "✅ Good Eligibility",
+        icon: "✅",
+        labelText: "Good Eligibility",
         badge: "Good (70-84)",
         badgeBg: "bg-emerald-500/10 text-emerald-600 dark:text-lime-400 border-emerald-500/20",
       };
@@ -311,7 +314,8 @@ export default function AssessmentPage() {
         barClass: "bg-gradient-to-r from-aurora-600 to-teal-500 h-2.5 rounded-full transition-all duration-500 ease-out",
         displayColor: "text-teal-600 dark:text-teal-400",
         labelClass: "text-teal-600 dark:text-teal-400 text-xs font-medium",
-        labelText: "🎯 Excellent Eligibility",
+        icon: "🎯",
+        labelText: "Excellent Eligibility",
         badge: "Excellent (85-100)",
         badgeBg: "bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20",
       };
@@ -328,37 +332,40 @@ export default function AssessmentPage() {
 
     // Validate income > 0
     if (incomeNum <= 0) {
-      alert("Please enter a valid annual income");
+      alert(t("Please enter a valid annual income"));
       return;
     }
 
     // Validate loan amount > 0
     if (loanNum <= 0) {
-      alert("Please enter a valid loan amount");
+      alert(t("Please enter a valid loan amount"));
       return;
     }
 
     // VALIDATION 1: Net Take-Home Salary vs Annual Income
     const salaryValidation = validateNetSalary(incomeNum, netSalaryNum);
     if (!salaryValidation.valid) {
-      alert("⚠️ Income Validation Failed\n\n" + salaryValidation.message);
+      alert("⚠️ " + t("Income Validation Failed") + "\n\n" + salaryValidation.message);
       return;
     }
 
     // VALIDATION 2: Existing EMIs vs Net Take-Home Salary
     const emiValidation = validateExistingEMIs(netSalaryNum, existingEmisNum);
     if (!emiValidation.valid) {
-      alert("⚠️ EMI Validation Failed\n\n" + emiValidation.message);
+      alert("⚠️ " + t("EMI Validation Failed") + "\n\n" + emiValidation.message);
       return;
     }
 
     // Warning if EMIs are between 50-70% of salary
     if (existingEmisNum > (netSalaryNum * 0.50)) {
       const confirmHighEMI = window.confirm(
-        `⚠️ High Debt Warning\n\n` +
-        `Your Existing Monthly EMIs (₹${existingEmisNum.toLocaleString('en-IN')}) are ${(existingEmisNum / netSalaryNum * 100).toFixed(1)}% of your Net Take-Home Salary.\n\n` +
-        `This is considered a high debt burden and may affect loan approval.\n\n` +
-        `Do you want to continue?`
+        `⚠️ ${t("High Debt Warning")}\n\n` +
+        t("Your Existing Monthly EMIs (₹{{emis}}) are {{percent}}% of your Net Take-Home Salary.", {
+          emis: existingEmisNum.toLocaleString('en-IN'),
+          percent: (existingEmisNum / netSalaryNum * 100).toFixed(1)
+        }) + `\n\n` +
+        t("This is considered a high debt burden and may affect loan approval.") + `\n\n` +
+        t("Do you want to continue?")
       );
 
       if (!confirmHighEMI) {
@@ -368,42 +375,42 @@ export default function AssessmentPage() {
 
     // Validate pincode (6 digits)
     if (!/^\d{6}$/.test(pincode.trim())) {
-      alert("Please enter a valid 6-digit pincode");
+      alert(t("Please enter a valid 6-digit pincode"));
       return;
     }
 
     // Validate address is not empty
     if (!address || address.trim().length < 10) {
-      alert("Please enter a complete address (at least 10 characters)");
+      alert(t("Please enter a complete address (at least 10 characters)"));
       return;
     }
 
     // Conditional validation
     if (loanPurpose === "education") {
       if (!educationProjectSize) {
-        alert("Please select your project size");
+        alert(t("Please select your project size"));
         return;
       }
     }
     if (loanPurpose === "business") {
       if (!businessProjectSize) {
-        alert("Please select your project size");
+        alert(t("Please select your project size"));
         return;
       }
     }
     if (loanPurpose === "personal") {
       if (!personalProjectSize) {
-        alert("Please select your loan size");
+        alert(t("Please select your loan size"));
         return;
       }
     }
     if (loanPurpose === "other") {
       if (!otherPurposeText.trim()) {
-        alert("Please specify your loan purpose");
+        alert(t("Please specify your loan purpose"));
         return;
       }
       if (!otherProjectSize) {
-        alert("Please select your project size");
+        alert(t("Please select your project size"));
         return;
       }
     }
@@ -522,11 +529,12 @@ export default function AssessmentPage() {
           </div>
 
           <div className="flex items-center justify-between text-[11px] gap-2">
-            <span id="creditScoreLabel" className={`${scoreConfig.labelClass} truncate font-medium`}>
-              {scoreConfig.labelText}
+            <span id="creditScoreLabel" className={`${scoreConfig.labelClass} truncate font-medium flex items-center gap-1`}>
+              <span>{scoreConfig.icon}</span>
+              <span>{t(scoreConfig.labelText)}</span>
             </span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${scoreConfig.badgeBg}`}>
-              {scoreConfig.badge}
+              {t(scoreConfig.badge)}
             </span>
           </div>
 
@@ -541,28 +549,28 @@ export default function AssessmentPage() {
             </summary>
             <div className="mt-2 space-y-1.5 text-[11px] text-slate-600 dark:text-slate-400 max-h-48 overflow-y-auto pr-1">
               <div className="flex justify-between items-center py-0.5 border-b border-slate-100 dark:border-navy-800/50">
-                <span>Income ₹2.5L-₹5L:</span>
-                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">+20 pts</span>
+                <span>{t("Income ₹2.5L-₹5L:")}</span>
+                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">{t("+20 pts")}</span>
               </div>
               <div className="flex justify-between items-center py-0.5 border-b border-slate-100 dark:border-navy-800/50">
-                <span>Loan ≤ 2x Income:</span>
-                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">+15 pts</span>
+                <span>{t("Loan ≤ 2x Income:")}</span>
+                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">{t("+15 pts")}</span>
               </div>
               <div className="flex justify-between items-center py-0.5 border-b border-slate-100 dark:border-navy-800/50">
-                <span>Credit Score 775+:</span>
-                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">+25 pts</span>
+                <span>{t("Credit Score 775+:")}</span>
+                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">{t("+25 pts")}</span>
               </div>
               <div className="flex justify-between items-center py-0.5 border-b border-slate-100 dark:border-navy-800/50">
-                <span>DTI Ratio ≤ 30%:</span>
-                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">+20 pts</span>
+                <span>{t("DTI Ratio ≤ 30%:")}</span>
+                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">{t("+20 pts")}</span>
               </div>
               <div className="flex justify-between items-center py-0.5 border-b border-slate-100 dark:border-navy-800/50">
-                <span>Experience 5+ yrs:</span>
-                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">+10 pts</span>
+                <span>{t("Experience 5+ yrs:")}</span>
+                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">{t("+10 pts")}</span>
               </div>
               <div className="flex justify-between items-center py-0.5">
-                <span>Owned Home:</span>
-                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">+10 pts</span>
+                <span>{t("Owned Home:")}</span>
+                <span className="text-teal-600 dark:text-teal-400 font-mono font-semibold">{t("+10 pts")}</span>
               </div>
             </div>
           </details>
@@ -576,7 +584,7 @@ export default function AssessmentPage() {
             <div className="flex items-center justify-between mb-2">
               <p className="text-slate-900 dark:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span>📊</span>
-                <span>Form Progress</span>
+                <span>{t("Form Progress")}</span>
               </p>
               <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
                 {filledRequiredFields}/{totalRequiredFields}
@@ -590,7 +598,11 @@ export default function AssessmentPage() {
               />
             </div>
             <p id="progressText" className="text-slate-500 dark:text-muted-foreground text-[11px] mt-2 font-medium">
-              {realTimeProgress}% Complete ({filledRequiredFields}/{totalRequiredFields} fields)
+              {t("{{progress}}% Complete ({{filled}}/{{total}} fields)", {
+                progress: realTimeProgress,
+                filled: filledRequiredFields,
+                total: totalRequiredFields,
+              })}
             </p>
           </div>
 
@@ -598,7 +610,7 @@ export default function AssessmentPage() {
           <div className="flex-1">
             <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <span>📑</span>
-              <span>Assessment Sections</span>
+              <span>{t("Assessment Sections")}</span>
             </h3>
             
             <nav className="space-y-1.5">
@@ -625,7 +637,7 @@ export default function AssessmentPage() {
                 >
                   <span className="flex items-center gap-2">
                     <span className="text-base">{item.icon}</span>
-                    <span>{item.label}</span>
+                    <span>{t(item.label)}</span>
                   </span>
                 </a>
               ))}
@@ -649,13 +661,13 @@ export default function AssessmentPage() {
               }}
               className="w-full bg-slate-50 dark:bg-navy-800 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-2 text-slate-900 dark:text-white text-sm"
             >
-              <option value="">Jump to section...</option>
-              <option value="#basic-info">💰 Basic Financial Info</option>
-              <option value="#loan-purpose">🎯 Loan Purpose &amp; Scale</option>
-              <option value="#financial-liabilities">💡 Financial Liabilities</option>
-              <option value="#professional-details">🏢 Professional Details</option>
-              <option value="#loan-demographics">📌 Loan Demographics</option>
-              <option value="#credit-score">📊 Credit Profile</option>
+              <option value="">{t("Jump to section...")}</option>
+              <option value="#basic-info">💰 {t("Basic Financial Info")}</option>
+              <option value="#loan-purpose">🎯 {t("Loan Purpose & Scale")}</option>
+              <option value="#financial-liabilities">💡 {t("Financial Liabilities")}</option>
+              <option value="#professional-details">🏢 {t("Professional Details")}</option>
+              <option value="#loan-demographics">📌 {t("Loan Demographics")}</option>
+              <option value="#credit-score">📊 {t("Credit Profile")}</option>
             </select>
           </div>
 
@@ -669,7 +681,11 @@ export default function AssessmentPage() {
                   {t("Step 1 of 4: Applicant Profile")}
                 </span>
                 <span className="font-mono text-slate-700 dark:text-slate-300 font-semibold">
-                  {realTimeProgress}% Complete ({filledRequiredFields}/{totalRequiredFields} fields)
+                  {t("{{progress}}% Complete ({{filled}}/{{total}} fields)", {
+                    progress: realTimeProgress,
+                    filled: filledRequiredFields,
+                    total: totalRequiredFields,
+                  })}
                 </span>
               </div>
 
@@ -752,7 +768,7 @@ export default function AssessmentPage() {
                 {/* SECTION 1: Basic Financial Information */}
                 <div className="mb-8 p-6 bg-slate-50/70 dark:bg-navy-800/50 border border-slate-200/80 dark:border-navy-700 rounded-xl space-y-6">
                   <h2 id="basic-info" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-6 scroll-mt-24">
-                    💰 Basic Financial Information
+                    💰 {t("Basic Financial Information")}
                   </h2>
 
                   {/* 1. Annual Family Income */}
@@ -762,7 +778,7 @@ export default function AssessmentPage() {
                         <span>{t("Annual Family Income")} (₹)</span>
                         <span className="text-rose-500 dark:text-red-400 text-sm font-normal ml-1.5">*</span>
                       </label>
-                      <span className="text-[11px] text-teal-600 dark:text-teal-400 font-mono font-medium">Limit: ≤ ₹5,00,000</span>
+                      <span className="text-[11px] text-teal-600 dark:text-teal-400 font-mono font-medium">{t("Limit: ≤ ₹5,00,000")}</span>
                     </div>
 
                     <div className="relative">
@@ -774,7 +790,7 @@ export default function AssessmentPage() {
                         required
                         min="1000"
                         max="5000000"
-                        placeholder="e.g. 250000"
+                        placeholder={t("e.g. 250000")}
                         value={annualIncome}
                         onChange={(e) => setAnnualIncome(e.target.value)}
                         className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg pl-8 pr-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all font-mono text-sm shadow-xs"
@@ -791,7 +807,7 @@ export default function AssessmentPage() {
                           onClick={() => setAnnualIncome(val.toString())}
                           className="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-900/60 text-slate-700 dark:text-slate-300 hover:bg-teal-600 hover:text-white dark:hover:bg-teal-600 dark:hover:text-white hover:border-teal-600 transition-colors cursor-pointer shadow-xs"
                         >
-                          ₹{(val / 100000).toFixed(2)}L {val === 500000 ? "(Max)" : ""}
+                          ₹{(val / 100000).toFixed(2)}L {val === 500000 ? t("(Max)") : ""}
                         </button>
                       ))}
                     </div>
@@ -816,7 +832,7 @@ export default function AssessmentPage() {
                         required
                         min="5000"
                         max="5000000"
-                        placeholder="e.g. 120000"
+                        placeholder={t("e.g. 120000")}
                         value={loanAmount}
                         onChange={(e) => setLoanAmount(e.target.value)}
                         className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg pl-8 pr-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all font-mono text-sm shadow-xs"
@@ -827,18 +843,18 @@ export default function AssessmentPage() {
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       <span className="text-[11px] text-slate-500 dark:text-muted-foreground">{t("Quick Select:")}</span>
                       {[
-                        { val: 100000, label: "₹1.00L (Micro)" },
-                        { val: 500000, label: "₹5.00L" },
-                        { val: 1500000, label: "₹15.00L (Term)" },
-                        { val: 3000000, label: "₹30.00L" },
-                      ].map(({ val, label }) => (
+                        { val: 100000, labelKey: "₹1.00L (Micro)" },
+                        { val: 500000, labelKey: "₹5.00L" },
+                        { val: 1500000, labelKey: "₹15.00L (Term)" },
+                        { val: 3000000, labelKey: "₹30.00L" },
+                      ].map(({ val, labelKey }) => (
                         <button
                           key={val}
                           type="button"
                           onClick={() => setLoanAmount(val.toString())}
                           className="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border border-slate-300 dark:border-navy-700 bg-white dark:bg-navy-900/60 text-slate-700 dark:text-slate-300 hover:bg-teal-600 hover:text-white dark:hover:bg-teal-600 dark:hover:text-white hover:border-teal-600 transition-colors cursor-pointer shadow-xs"
                         >
-                          {label}
+                          {t(labelKey)}
                         </button>
                       ))}
                     </div>
@@ -848,13 +864,13 @@ export default function AssessmentPage() {
                 {/* SECTION 2: Loan Purpose */}
                 <div className="mb-8 p-6 bg-slate-50/70 dark:bg-navy-800/50 border border-slate-200/80 dark:border-navy-700 rounded-xl space-y-6">
                   <h2 id="loan-purpose" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2 scroll-mt-24">
-                    🎯 Loan Purpose
+                    🎯 {t("Loan Purpose & Scale")}
                   </h2>
                   
                   {/* Primary Loan Purpose */}
                   <div>
                     <label htmlFor="loanPurpose" className="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                      Primary Loan Purpose *
+                      {t("Primary Loan Purpose")} *
                     </label>
                     <select
                       id="loanPurpose"
@@ -864,11 +880,11 @@ export default function AssessmentPage() {
                       onChange={(e) => setLoanPurpose(e.target.value)}
                       className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all cursor-pointer text-sm shadow-xs"
                     >
-                      <option value="">Select Purpose</option>
-                      <option value="education">Education</option>
-                      <option value="business">Business / Self-Employment</option>
-                      <option value="personal">Personal Reasons</option>
-                      <option value="other">Other</option>
+                      <option value="">{t("Select Purpose")}</option>
+                      <option value="education">{t("Education")}</option>
+                      <option value="business">{t("Business / Self-Employment")}</option>
+                      <option value="personal">{t("Personal Reasons")}</option>
+                      <option value="other">{t("Other")}</option>
                     </select>
                   </div>
                   
@@ -878,7 +894,7 @@ export default function AssessmentPage() {
                       {/* Project Size for Education */}
                       <div>
                         <label htmlFor="educationProjectSize" className="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                          Project Size *
+                          {t("Project Size")} *
                         </label>
                         <select
                           id="educationProjectSize"
@@ -888,13 +904,13 @@ export default function AssessmentPage() {
                           onChange={(e) => setEducationProjectSize(e.target.value)}
                           className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all cursor-pointer text-sm shadow-xs"
                         >
-                          <option value="">Select Project Size</option>
-                          <option value="micro">Micro (Up to ₹1.40 Lakh) - Diploma, Certificate, Short-term Courses</option>
-                          <option value="medium">Medium (₹1.40 Lakh - ₹10 Lakh) - Undergraduate, Postgraduate, Professional Courses</option>
-                          <option value="large">Large (₹10 Lakh - ₹50 Lakh) - Ph.D., Study Abroad, Research Programs</option>
+                          <option value="">{t("Select Project Size")}</option>
+                          <option value="micro">{t("Micro (Up to ₹1.40 Lakh) - Diploma, Certificate, Short-term Courses")}</option>
+                          <option value="medium">{t("Medium (₹1.40 Lakh - ₹10 Lakh) - Undergraduate, Postgraduate, Professional Courses")}</option>
+                          <option value="large">{t("Large (₹10 Lakh - ₹50 Lakh) - Ph.D., Study Abroad, Research Programs")}</option>
                         </select>
                         <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2">
-                          💡 Select based on your total education expense requirement
+                          💡 {t("Select based on your total education expense requirement")}
                         </p>
                       </div>
                     </div>
@@ -906,7 +922,7 @@ export default function AssessmentPage() {
                       {/* Project Size for Business */}
                       <div>
                         <label htmlFor="businessProjectSize" className="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                          Project Size *
+                          {t("Project Size")} *
                         </label>
                         <select
                           id="businessProjectSize"
@@ -916,13 +932,13 @@ export default function AssessmentPage() {
                           onChange={(e) => setBusinessProjectSize(e.target.value)}
                           className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all cursor-pointer text-sm shadow-xs"
                         >
-                          <option value="">Select Project Size</option>
-                          <option value="micro">Micro (Up to ₹1.40 Lakh) - Small business, working capital, equipment purchase</option>
-                          <option value="medium">Medium (₹1.40 Lakh - ₹10 Lakh) - Business expansion, machinery, inventory</option>
-                          <option value="large">Large (₹10 Lakh - ₹50 Lakh) - Large-scale manufacturing, infrastructure, franchise</option>
+                          <option value="">{t("Select Project Size")}</option>
+                          <option value="micro">{t("Micro (Up to ₹1.40 Lakh) - Small business, working capital, equipment purchase")}</option>
+                          <option value="medium">{t("Medium (₹1.40 Lakh - ₹10 Lakh) - Business expansion, machinery, inventory")}</option>
+                          <option value="large">{t("Large (₹10 Lakh - ₹50 Lakh) - Large-scale manufacturing, infrastructure, franchise")}</option>
                         </select>
                         <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2">
-                          💡 Micro: Small projects (Micro Finance Scheme) | Medium/Large: Term Loan Scheme
+                          💡 {t("Micro: Small projects (Micro Finance Scheme) | Medium/Large: Term Loan Scheme")}
                         </p>
                       </div>
                     </div>
@@ -934,7 +950,7 @@ export default function AssessmentPage() {
                       {/* Project Size for Personal */}
                       <div>
                         <label htmlFor="personalProjectSize" className="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                          Loan Size *
+                          {t("Loan Size")} *
                         </label>
                         <select
                           id="personalProjectSize"
@@ -944,13 +960,13 @@ export default function AssessmentPage() {
                           onChange={(e) => setPersonalProjectSize(e.target.value)}
                           className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all cursor-pointer text-sm shadow-xs"
                         >
-                          <option value="">Select Loan Size</option>
-                          <option value="micro">Micro (Up to ₹1 Lakh) - Small personal needs, consumer durables</option>
-                          <option value="medium">Medium (₹1 Lakh - ₹5 Lakh) - Medical, wedding, vehicle purchase</option>
-                          <option value="large">Large (₹5 Lakh+) - Major expenses, debt consolidation, home renovation</option>
+                          <option value="">{t("Select Loan Size")}</option>
+                          <option value="micro">{t("Micro (Up to ₹1 Lakh) - Small personal needs, consumer durables")}</option>
+                          <option value="medium">{t("Medium (₹1 Lakh - ₹5 Lakh) - Medical, wedding, vehicle purchase")}</option>
+                          <option value="large">{t("Large (₹5 Lakh+) - Major expenses, debt consolidation, home renovation")}</option>
                         </select>
                         <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2">
-                          💡 Select based on your total loan requirement
+                          💡 {t("Select based on your total loan requirement")}
                         </p>
                       </div>
                     </div>
@@ -961,14 +977,14 @@ export default function AssessmentPage() {
                     <div id="otherPurposeContainer" className="space-y-4 animate-fade-in transition-all">
                       <div>
                         <label htmlFor="otherPurposeText" className="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                          Specify Other Purpose *
+                          {t("Specify Other Purpose")} *
                         </label>
                         <input
                           type="text"
                           id="otherPurposeText"
                           name="otherPurposeText"
                           required
-                          placeholder="e.g., Starting a coaching center, Buying agricultural equipment, etc."
+                          placeholder={t("e.g., Starting a coaching center, Buying agricultural equipment, etc.")}
                           value={otherPurposeText}
                           onChange={(e) => setOtherPurposeText(e.target.value)}
                           className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all text-sm shadow-xs"
@@ -978,7 +994,7 @@ export default function AssessmentPage() {
                       {/* Project Size for Other */}
                       <div>
                         <label htmlFor="otherProjectSize" className="block text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                          Project Size *
+                          {t("Project Size")} *
                         </label>
                         <select
                           id="otherProjectSize"
@@ -988,13 +1004,13 @@ export default function AssessmentPage() {
                           onChange={(e) => setOtherProjectSize(e.target.value)}
                           className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all cursor-pointer text-sm shadow-xs"
                         >
-                          <option value="">Select Project Size</option>
-                          <option value="micro">Micro (Up to ₹1.40 Lakh) - Small projects</option>
-                          <option value="medium">Medium (₹1.40 Lakh - ₹10 Lakh) - Medium-scale projects</option>
-                          <option value="large">Large (₹10 Lakh - ₹50 Lakh) - Large-scale projects</option>
+                          <option value="">{t("Select Project Size")}</option>
+                          <option value="micro">{t("Micro (Up to ₹1.40 Lakh) - Small projects")}</option>
+                          <option value="medium">{t("Medium (₹1.40 Lakh - ₹10 Lakh) - Medium-scale projects")}</option>
+                          <option value="large">{t("Large (₹10 Lakh - ₹50 Lakh) - Large-scale projects")}</option>
                         </select>
                         <p className="text-xs text-slate-500 dark:text-muted-foreground mt-2">
-                          💡 Select based on your total project cost
+                          💡 {t("Select based on your total project cost")}
                         </p>
                       </div>
                     </div>
@@ -1004,7 +1020,7 @@ export default function AssessmentPage() {
                 {/* SECTION 3: Financial Liabilities & Banking Profile */}
                 <div className="mb-8 p-6 bg-slate-50/70 dark:bg-navy-800/50 border border-slate-200/80 dark:border-navy-700 rounded-xl">
                   <h2 id="financial-liabilities" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-6 scroll-mt-24">
-                    💡 Financial Liabilities &amp; Banking Profile
+                    💡 {t("Financial Liabilities & Banking Profile")}
                   </h2>
                   
                   {/* Existing Monthly EMIs */}
@@ -1044,18 +1060,18 @@ export default function AssessmentPage() {
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all cursor-pointer"
                     >
                       <option value="">{t("Select your bank")}</option>
-                      <option value="sbi">State Bank of India (SBI)</option>
-                      <option value="hdfc">HDFC Bank</option>
-                      <option value="icici">ICICI Bank</option>
-                      <option value="axis">Axis Bank</option>
-                      <option value="kotak">Kotak Mahindra Bank</option>
-                      <option value="pnb">Punjab National Bank</option>
-                      <option value="bob">Bank of Baroda</option>
-                      <option value="canara">Canara Bank</option>
-                      <option value="union">Union Bank of India</option>
-                      <option value="other-private">Other Private Bank</option>
-                      <option value="other-psb">Other Public Sector Bank</option>
-                      <option value="other">Other Bank</option>
+                      <option value="sbi">{t("State Bank of India (SBI)")}</option>
+                      <option value="hdfc">{t("HDFC Bank")}</option>
+                      <option value="icici">{t("ICICI Bank")}</option>
+                      <option value="axis">{t("Axis Bank")}</option>
+                      <option value="kotak">{t("Kotak Mahindra Bank")}</option>
+                      <option value="pnb">{t("Punjab National Bank")}</option>
+                      <option value="bob">{t("Bank of Baroda")}</option>
+                      <option value="canara">{t("Canara Bank")}</option>
+                      <option value="union">{t("Union Bank of India")}</option>
+                      <option value="other-private">{t("Other Private Bank")}</option>
+                      <option value="other-psb">{t("Other Public Sector Bank")}</option>
+                      <option value="other">{t("Other Bank")}</option>
                     </select>
                     <p className="text-slate-500 dark:text-muted-foreground text-xs mt-2">
                       💡 {t("Some banks offer pre-approved corporate offers for salary account holders")}
@@ -1065,7 +1081,7 @@ export default function AssessmentPage() {
                   {/* Net Take-Home Salary */}
                   <div className="mb-4">
                     <label htmlFor="netSalary" className="block text-slate-900 dark:text-white font-medium mb-2">
-                      {t("Net Take-Home Salary")} (₹/month)
+                      {t("Net Take-Home Salary")} (₹/{t("month")})
                       <span className="text-red-500 dark:text-red-400 text-sm font-normal ml-2">*</span>
                     </label>
                     <input 
@@ -1095,7 +1111,7 @@ export default function AssessmentPage() {
                     }`}>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                          📊 Debt-to-Income (DTI) Ratio:
+                          📊 {t("Debt-to-Income (DTI) Ratio:")}
                         </span>
                         <span className="text-sm font-mono font-extrabold text-slate-900 dark:text-white">
                           {computedDti.toFixed(1)}%
@@ -1124,10 +1140,10 @@ export default function AssessmentPage() {
                           : "text-emerald-700 dark:text-teal-400"
                       }`}>
                         {computedDti > 70 
-                          ? "❌ Critical: DTI exceeds 70% threshold. This will trigger an automatic policy decline."
+                          ? t("Critical: DTI exceeds 70% threshold. This will trigger an automatic policy decline.") 
                           : computedDti > 50 
-                          ? "⚠️ Warning: DTI is above 50%. High debt burden may reduce maximum eligible loan size."
-                          : "✅ Healthy: DTI is within acceptable credit underwriting guidelines (≤50%)."}
+                          ? t("Warning: DTI is above 50%. High debt burden may reduce maximum eligible loan size.") 
+                          : t("Healthy: DTI is within acceptable credit underwriting guidelines (≤50%).")}
                       </p>
                     </div>
                   )}
@@ -1136,7 +1152,7 @@ export default function AssessmentPage() {
                 {/* SECTION 4: Professional Stability & Employment Details */}
                 <div className="mb-8 p-6 bg-slate-50/70 dark:bg-navy-800/50 border border-slate-200/80 dark:border-navy-700 rounded-xl">
                   <h2 id="professional-details" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-6 scroll-mt-24">
-                    🏢 Professional Stability &amp; Employment Details
+                    🏢 {t("Professional Stability & Employment Details")}
                   </h2>
                   
                   {/* Current Employer/Company Name */}
@@ -1150,7 +1166,7 @@ export default function AssessmentPage() {
                       id="companyName"
                       name="companyName"
                       required
-                      placeholder="e.g., TCS, Infosys, HCL, Government, etc." 
+                      placeholder={t("e.g., TCS, Infosys, HCL, Government, etc.")} 
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all"
@@ -1175,11 +1191,11 @@ export default function AssessmentPage() {
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all cursor-pointer"
                     >
                       <option value="">{t("Select duration")}</option>
-                      <option value="0-1">Less than 1 year</option>
-                      <option value="1-2">1-2 years</option>
-                      <option value="2-5">2-5 years</option>
-                      <option value="5-10">5-10 years</option>
-                      <option value="10+">10+ years</option>
+                      <option value="0-1">{t("Less than 1 year")}</option>
+                      <option value="1-2">{t("1-2 years")}</option>
+                      <option value="2-5">{t("2-5 years")}</option>
+                      <option value="5-10">{t("5-10 years")}</option>
+                      <option value="10+">{t("10+ years")}</option>
                     </select>
                     <p className="text-slate-500 dark:text-muted-foreground text-xs mt-2">
                       ✓ {t("Longer tenure shows job stability and improves approval chances")}
@@ -1201,12 +1217,12 @@ export default function AssessmentPage() {
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all cursor-pointer"
                     >
                       <option value="">{t("Select experience")}</option>
-                      <option value="0-1">Less than 1 year (Fresher)</option>
-                      <option value="1-3">1-3 years</option>
-                      <option value="3-5">3-5 years</option>
-                      <option value="5-10">5-10 years</option>
-                      <option value="10-15">10-15 years</option>
-                      <option value="15+">15+ years</option>
+                      <option value="0-1">{t("Less than 1 year (Fresher)")}</option>
+                      <option value="1-3">{t("1-3 years")}</option>
+                      <option value="3-5">{t("3-5 years")}</option>
+                      <option value="5-10">{t("5-10 years")}</option>
+                      <option value="10-15">{t("10-15 years")}</option>
+                      <option value="15+">{t("15+ years")}</option>
                     </select>
                     <p className="text-slate-500 dark:text-muted-foreground text-xs mt-2">
                       📈 {t("More experience = better career stability = higher loan eligibility")}
@@ -1217,7 +1233,7 @@ export default function AssessmentPage() {
                 {/* SECTION 5: Residential Demographics */}
                 <div className="mb-8 p-6 bg-slate-50/70 dark:bg-navy-800/50 border border-slate-200/80 dark:border-navy-700 rounded-xl">
                   <h2 id="loan-demographics" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-6 scroll-mt-24">
-                    📌 Residential Demographics
+                    📌 {t("Residential Demographics")}
                   </h2>
                   
                   {/* Current Pincode */}
@@ -1233,7 +1249,7 @@ export default function AssessmentPage() {
                       required 
                       maxLength={6}
                       pattern="[0-9]{6}"
-                      placeholder="e.g., 110001" 
+                      placeholder={t("e.g., 110001")} 
                       value={pincode}
                       onChange={(e) => setPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all font-mono"
@@ -1258,12 +1274,12 @@ export default function AssessmentPage() {
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all cursor-pointer"
                     >
                       <option value="">{t("Select status")}</option>
-                      <option value="owned-self">Owned by Self</option>
-                      <option value="owned-family">Owned by Family/Parents</option>
-                      <option value="rented">Rented</option>
-                      <option value="pg-hostel">PG/Hostel</option>
-                      <option value="company-provided">Company Provided Accommodation</option>
-                      <option value="other">Other</option>
+                      <option value="owned-self">{t("Owned by Self")}</option>
+                      <option value="owned-family">{t("Owned by Family/Parents")}</option>
+                      <option value="rented">{t("Rented")}</option>
+                      <option value="pg-hostel">{t("PG/Hostel")}</option>
+                      <option value="company-provided">{t("Company Provided Accommodation")}</option>
+                      <option value="other">{t("Other")}</option>
                     </select>
                     <p className="text-slate-500 dark:text-muted-foreground text-xs mt-2">
                       🏠 {t("Home ownership indicates asset stability and may improve approval")}
@@ -1273,7 +1289,7 @@ export default function AssessmentPage() {
                   {/* Complete Address */}
                   <div className="mb-4">
                     <label htmlFor="address" className="block text-slate-900 dark:text-white font-medium mb-2">
-                      Complete Address
+                      {t("Complete Address")}
                       <span className="text-red-500 dark:text-red-400 text-sm font-normal ml-2">*</span>
                     </label>
                     <textarea 
@@ -1281,13 +1297,13 @@ export default function AssessmentPage() {
                       name="address"
                       required
                       rows={3}
-                      placeholder="House/Flat No., Building Name, Street, Area, Landmark" 
+                      placeholder={t("House/Flat No., Building Name, Street, Area, Landmark")} 
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all resize-none"
                     />
                     <p className="text-slate-500 dark:text-muted-foreground text-xs mt-2">
-                      📍 Your complete residential address for loan processing
+                      📍 {t("Your complete residential address for loan processing")}
                     </p>
                   </div>
                 </div>
@@ -1295,7 +1311,7 @@ export default function AssessmentPage() {
                 {/* SECTION 6: Credit Profile & Score Assessment */}
                 <div className="mb-8 p-6 bg-slate-50/70 dark:bg-navy-800/50 border border-slate-200/80 dark:border-navy-700 rounded-xl">
                   <h2 id="credit-score" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-6 scroll-mt-24">
-                    📊 Credit Profile &amp; Score Assessment
+                    📊 {t("Credit Profile & Score Assessment")}
                   </h2>
                   
                   {/* Credit Score Range */}
@@ -1313,20 +1329,20 @@ export default function AssessmentPage() {
                       className="w-full bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:border-teal-500 dark:focus:border-aurora-500 focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500/20 transition-all cursor-pointer"
                     >
                       <option value="">{t("Select your credit score range")}</option>
-                      <option value="excellent">Excellent (775 - 900)</option>
-                      <option value="good">Good (700 - 774)</option>
-                      <option value="fair">Fair (600 - 699)</option>
-                      <option value="needs-work">Needs Work (Below 600)</option>
-                      <option value="no-history">I don&apos;t know / First time borrowing (No History)</option>
+                      <option value="excellent">{t("Excellent (775 - 900)")}</option>
+                      <option value="good">{t("Good (700 - 774)")}</option>
+                      <option value="fair">{t("Fair (600 - 699)")}</option>
+                      <option value="needs-work">{t("Needs Work (Below 600)")}</option>
+                      <option value="no-history">{t("I don't know / First time borrowing (No History)")}</option>
                     </select>
                     <div className="mt-3 p-3.5 bg-indigo-50/80 dark:bg-aurora-900/20 border border-indigo-200/80 dark:border-aurora-700/50 rounded-lg">
-                      <p className="text-slate-900 dark:text-white text-sm font-semibold mb-2">💡 Credit Score Impact:</p>
+                      <p className="text-slate-900 dark:text-white text-sm font-semibold mb-2">💡 {t("Credit Score Impact:")}</p>
                       <ul className="text-slate-600 dark:text-muted-foreground text-xs space-y-1">
-                        <li>-  Excellent (775+): Best interest rates, highest approval chance</li>
-                        <li>-  Good (700-774): Competitive rates, good approval chance</li>
-                        <li>-  Fair (600-699): Standard rates, may need additional documentation</li>
-                        <li>-  Below 600: Higher interest rates, lower approval chance</li>
-                        <li>-  No History: First-time borrower schemes available</li>
+                        <li>-  {t("Excellent (775+): Best interest rates, highest approval chance")}</li>
+                        <li>-  {t("Good (700-774): Competitive rates, good approval chance")}</li>
+                        <li>-  {t("Fair (600-699): Standard rates, may need additional documentation")}</li>
+                        <li>-  {t("Below 600: Higher interest rates, lower approval chance")}</li>
+                        <li>-  {t("No History: First-time borrower schemes available")}</li>
                       </ul>
                     </div>
                   </div>
@@ -1340,7 +1356,7 @@ export default function AssessmentPage() {
                       disabled
                       className="w-full h-14 py-3 px-4 bg-slate-100 dark:bg-navy-800/80 border border-slate-300 dark:border-navy-700 text-slate-400 dark:text-muted-foreground rounded-xl font-bold flex items-center justify-center gap-2 cursor-not-allowed transition-all opacity-80"
                     >
-                      <span>❌ Improve Eligibility Score (Min 40 Required)</span>
+                      <span>❌ {t("Improve Eligibility Score (Min 40 Required)")}</span>
                     </button>
                   ) : (
                     <button

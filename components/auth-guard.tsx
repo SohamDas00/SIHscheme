@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { isAuthenticated, UserSessionData } from "@/lib/firebase";
 import { ShieldCheck } from "lucide-react";
 import { BrandIcon } from "@/components/brand-icon";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,10 +34,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         </div>
         <div className="text-center space-y-1">
           <p className="text-base font-semibold bg-gradient-to-r from-aurora-400 to-teal-400 bg-clip-text text-transparent">
-            Verifying Authentication...
+            {t("Verifying Authentication...")}
           </p>
           <p className="text-xs text-muted-foreground">
-            Ensuring secure access to SchemeBridge features
+            {t("Ensuring secure access to SchemeBridge features")}
           </p>
         </div>
       </div>

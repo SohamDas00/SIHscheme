@@ -264,12 +264,12 @@ export default function MatchedSchemePage() {
               </div>
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-2 bg-destructive/20 border border-destructive text-destructive px-4 py-1.5 rounded-full text-xs font-bold">
-                  {creditDecision?.flag === "RED" ? "❌ Underwriting Auto-Decline" : "✗ Statutory Limit Exceeded"}
+                  {creditDecision?.flag === "RED" ? `❌ ${t("Underwriting Auto-Decline")}` : `✗ ${t("Statutory Limit Exceeded")}`}
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">
-                  {creditDecision?.flag === "RED" ? "Application Declined by Credit Policy" : t("Not Eligible for Concessional Lending")}
+                  {creditDecision?.flag === "RED" ? t("Application Declined by Credit Policy") : t("Not Eligible for Concessional Lending")}
                 </h2>
-                <p className="text-sm text-muted-foreground">{scheme.ineligibleReason}</p>
+                <p className="text-sm text-muted-foreground">{scheme.ineligibleReason ? t(scheme.ineligibleReason) : ""}</p>
               </div>
             </div>
 
@@ -278,19 +278,19 @@ export default function MatchedSchemePage() {
               <div className="p-4 rounded-xl bg-slate-900/80 border border-destructive/30 space-y-3 text-xs">
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <span className="font-bold text-destructive uppercase tracking-wider">
-                    📋 Adverse Action Notice (Fair Lending Disclosure)
+                    📋 {t("Adverse Action Notice (Fair Lending Disclosure)")}
                   </span>
                   <span className="text-[11px] text-amber-400 font-mono">
-                    Cooldown: {creditDecision.adverseAction.cooldownPeriod}
+                    {t("Cooldown:")} {creditDecision.adverseAction.cooldownPeriod ? t(creditDecision.adverseAction.cooldownPeriod) : ""}
                   </span>
                 </div>
                 <div className="space-y-1.5">
-                  <span className="text-slate-300 font-semibold block">Primary Underwriting Negative Factors:</span>
+                  <span className="text-slate-300 font-semibold block">{t("Primary Underwriting Negative Factors:")}</span>
                   <ul className="space-y-1 text-slate-400">
                     {creditDecision.adverseAction.top3Reasons.map((reason, idx) => (
                       <li key={idx} className="flex items-start gap-2">
                         <span className="text-red-400 font-bold">•</span>
-                        <span>{reason}</span>
+                        <span>{t(reason)}</span>
                       </li>
                     ))}
                   </ul>
@@ -299,12 +299,12 @@ export default function MatchedSchemePage() {
             )}
 
             <div className="p-4 rounded-xl bg-slate-100 dark:bg-navy-900/60 border border-slate-200 dark:border-navy-700 text-xs space-y-2 font-mono">
-              <span className="font-bold text-foreground uppercase tracking-wider block">{t("Submitted on")}</span>
+              <span className="font-bold text-foreground uppercase tracking-wider block">{t("Submitted Details")}</span>
               <div className="grid grid-cols-2 gap-2 text-muted-foreground">
                 <div>{t("Annual Income")}: <strong className="text-foreground">₹{assessment.income.toLocaleString("en-IN")}</strong></div>
                 <div>{t("Loan Amount")}: <strong className="text-foreground">₹{assessment.loanAmount.toLocaleString("en-IN")}</strong></div>
-                <div>{t("Credit Score")}: <strong className="text-foreground uppercase">{assessment.creditScore || "N/A"}</strong></div>
-                <div>{t("Existing EMIs")}: <strong className="text-foreground">₹{(assessment.existingEmis || 0).toLocaleString("en-IN")}/mo</strong></div>
+                <div>{t("Credit Score")}: <strong className="text-foreground uppercase">{t(assessment.creditScore || "no-history") || assessment.creditScore || "N/A"}</strong></div>
+                <div>{t("Existing EMIs")}: <strong className="text-foreground">₹{(assessment.existingEmis || 0).toLocaleString("en-IN")}{t("/mo")}</strong></div>
               </div>
             </div>
 
@@ -342,7 +342,7 @@ export default function MatchedSchemePage() {
                         : "bg-orange-500/20 text-orange-400 border-orange-500/40"
                     }`}>
                       <span className="h-1.5 w-1.5 rounded-full bg-current animate-ping" />
-                      Score: {creditDecision.score}/100 ({creditDecision.riskCategory})
+                      {t("Score:")} {creditDecision.score}/100 ({t(creditDecision.riskCategory)})
                     </div>
                   )}
                 </div>
@@ -364,17 +364,17 @@ export default function MatchedSchemePage() {
 
             {/* Description */}
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {scheme.description}
+              {t(scheme.description)}
             </p>
 
             {/* Credit Engine Haircut / Counter-Offer Alert if applicable */}
             {creditDecision?.counterOffer && (
               <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1.5 text-xs">
                 <span className="font-bold text-amber-400 uppercase tracking-wider block">
-                  ⚠️ FOIR Debt Sizing Counter-Offer Applied
+                  ⚠️ {t("FOIR Debt Sizing Counter-Offer Applied")}
                 </span>
                 <p className="text-slate-300">
-                  {creditDecision.counterOffer.reason}. Maximum approved ticket is capped at{" "}
+                  {t("Based on your Fixed Obligation to Income Ratio (FOIR), the maximum eligible loan amount is")} ₹{creditDecision.counterOffer.approvedAmount.toLocaleString("en-IN")}. {t("Maximum approved ticket is capped at")}{" "}
                   <strong className="text-white font-mono">
                     ₹{creditDecision.counterOffer.approvedAmount.toLocaleString("en-IN")}
                   </strong>.
@@ -385,7 +385,7 @@ export default function MatchedSchemePage() {
             {/* 4-Metric Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-4 rounded-xl bg-slate-100 dark:bg-muted/40 border border-slate-200 dark:border-border/70 space-y-1">
-                <span className="text-[11px] text-muted-foreground font-semibold block">{t("Total Amount Payable")}</span>
+                <span className="text-[11px] text-muted-foreground font-semibold block">{t("Total Project Cost")}</span>
                 <span className="text-lg font-bold font-mono text-foreground">₹{scheme.totalProjectCost.toLocaleString("en-IN")}</span>
                 <span className="text-[10px] text-muted-foreground block">{t("Required Loan Amount")}</span>
               </div>
@@ -404,7 +404,7 @@ export default function MatchedSchemePage() {
 
               <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 space-y-1">
                 <span className="text-[11px] text-indigo-700 dark:text-indigo-300 font-semibold block">{t("Maximum Loan Ceiling")}</span>
-                <span className="text-lg font-bold font-mono text-indigo-600 dark:text-indigo-400">{scheme.maxLoanText}</span>
+                <span className="text-lg font-bold font-mono text-indigo-600 dark:text-indigo-400">{t(scheme.maxLoanText)}</span>
                 <span className="text-[10px] text-indigo-600/80 dark:text-indigo-400/80 block">{t("90:10 Ratio")}</span>
               </div>
             </div>

@@ -25,6 +25,7 @@ export default function AssessmentPage() {
 
   // Section 2: Loan Purpose & Conditional Categories
   const [loanPurpose, setLoanPurpose] = useState<string>("");
+  const [requirementText, setRequirementText] = useState<string>("");
   const [educationCategory, setEducationCategory] = useState<string>("");
   const [educationProjectSize, setEducationProjectSize] = useState<string>("");
   const [businessType, setBusinessType] = useState<string>("");
@@ -62,6 +63,8 @@ export default function AssessmentPage() {
     if (existing) {
       if (existing.income) setAnnualIncome(existing.income.toString());
       if (existing.loanAmount) setLoanAmount(existing.loanAmount.toString());
+      if (existing.requirementText) setRequirementText(existing.requirementText);
+      else if (existing.purposeDescription) setRequirementText(existing.purposeDescription);
       if (existing.loanPurpose) {
         setLoanPurpose(existing.loanPurpose);
       } else if (existing.primaryPurpose) {
@@ -439,6 +442,8 @@ export default function AssessmentPage() {
       loanAmount: loanNum,
       loanPurpose,
       primaryPurpose: loanPurpose,
+      requirementText: requirementText.trim() || otherPurposeText || "",
+      purposeDescription: requirementText.trim() || otherPurposeText || "",
       educationCategory: isEducation ? educationCategory : undefined,
       educationProjectSize: isEducation ? educationProjectSize : undefined,
       businessProjectSize: loanPurpose === "business" ? businessProjectSize : undefined,
@@ -881,11 +886,60 @@ export default function AssessmentPage() {
                       className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-slate-300 dark:border-navy-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 dark:focus:ring-aurora-500 focus:border-teal-500 dark:focus:border-transparent transition-all cursor-pointer text-sm shadow-xs"
                     >
                       <option value="">{t("Select Purpose")}</option>
-                      <option value="education">{t("Education")}</option>
                       <option value="business">{t("Business / Self-Employment")}</option>
+                      <option value="education">{t("Education")}</option>
                       <option value="personal">{t("Personal Reasons")}</option>
                       <option value="other">{t("Other")}</option>
                     </select>
+                  </div>
+
+                  {/* AI Semantic Requirement & Business Purpose Input */}
+                  <div className="p-4 bg-teal-500/5 dark:bg-teal-950/20 border border-teal-500/20 rounded-xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="requirementText" className="block text-sm font-bold text-teal-900 dark:text-teal-300">
+                        ✨ {t("Describe your Business Idea or Need in Detail")} (AI Semantic Match)
+                      </label>
+                      <span className="text-[11px] font-mono text-teal-600 dark:text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded-md border border-teal-500/20">
+                        OpenRouter Embeddings
+                      </span>
+                    </div>
+                    <textarea
+                      id="requirementText"
+                      name="requirementText"
+                      rows={3}
+                      placeholder={t("e.g., I want to start a tailoring business and need money for sewing machines...")}
+                      value={requirementText}
+                      onChange={(e) => setRequirementText(e.target.value)}
+                      className="w-full px-4 py-3 bg-white dark:bg-navy-900 border border-teal-300 dark:border-teal-800 rounded-lg text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 text-sm shadow-xs resize-none"
+                    />
+                    
+                    {/* Quick Preset Prompts */}
+                    <div className="space-y-1.5 pt-1">
+                      <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                        {t("Quick Test Presets:")}
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { label: "🧵 Tailoring & Sewing Machines", text: "I want to start a tailoring business and need money for sewing machines.", purpose: "business", loan: "120000" },
+                          { label: "🥛 Dairy Business Assistance", text: "I need financial assistance to start a small dairy business.", purpose: "business", loan: "250000" },
+                          { label: "🎓 Higher Education Funding", text: "I want funding for my higher education.", purpose: "education", loan: "1000000" },
+                          { label: "🏭 Factory Machinery Expansion", text: "I want to expand my commercial manufacturing unit with heavy machinery.", purpose: "business", loan: "2500000" }
+                        ].map((preset, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              setRequirementText(preset.text);
+                              setLoanPurpose(preset.purpose);
+                              if (preset.loan) setLoanAmount(preset.loan);
+                            }}
+                            className="text-[11px] px-2.5 py-1 rounded-lg bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/30 text-slate-700 dark:text-slate-300 transition-all cursor-pointer shadow-xs"
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                   
                   {/* Education Project Size (Conditional) */}

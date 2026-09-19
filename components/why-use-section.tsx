@@ -86,7 +86,7 @@ export function WhyUseSection() {
       description: t("Direct geo-spatial map locating authorized Public Sector Banks, Regional Rural Banks, and State Channelising Agencies in your city."),
       highlights: [
         t("16+ verified metro bank branches"),
-        t("NPA risk health indicator filter"),
+        t("Official channel partner verification"),
         t("Direct branch contact details"),
       ],
     },

@@ -77,7 +77,6 @@ interface PartnerItem {
   type: string;
   schemes: string[];
   status: string;
-  npaFlag: boolean;
 }
 
 export function SchemeMatchingForm({
@@ -110,10 +109,10 @@ export function SchemeMatchingForm({
   const activePartnersCount = useMemo(() => {
     const typedPartners = partnersData as PartnerItem[];
     if (matchedSchemeType === "All Schemes") {
-      return typedPartners.filter((p) => p.status === "Active" && !p.npaFlag).length;
+      return typedPartners.filter((p) => p.status === "Active").length;
     }
     return typedPartners.filter(
-      (p) => p.status === "Active" && !p.npaFlag && p.schemes.includes(matchedSchemeType)
+      (p) => p.status === "Active" && p.schemes.includes(matchedSchemeType)
     ).length;
   }, [matchedSchemeType]);
 

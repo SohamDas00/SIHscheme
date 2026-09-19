@@ -22,14 +22,16 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { AppState, ApplicationRecord } from "@/lib/app-state";
+import { ApplicationRecord } from "@/lib/app-state";
 import { AuthGuard } from "@/components/auth-guard";
+import { getIdToken } from "@/lib/firebase";
 
 export default function MyApplicationsPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -37,10 +39,35 @@ export default function MyApplicationsPage() {
     loadApplications();
   }, []);
 
-  const loadApplications = () => {
-    const apps = AppState.getApplications();
-    setApplications(apps);
-    setIsLoaded(true);
+  const loadApplications = async () => {
+    setIsLoaded(false);
+    setError(null);
+    try {
+      const idToken = await getIdToken();
+      if (!idToken) {
+        setIsLoaded(true);
+        return;
+      }
+
+      const res = await fetch("/api/applications", {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to load applications from database.");
+      }
+
+      const data = await res.json();
+      setApplications(data.applications || []);
+    } catch (err: any) {
+      console.error("❌ Failed to fetch applications:", err);
+      setError(err.message || "Could not retrieve applications.");
+    } finally {
+      setIsLoaded(true);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -60,12 +87,30 @@ export default function MyApplicationsPage() {
     router.push(`/application-status?id=${encodeURIComponent(appId)}`);
   };
 
-  const handleDeleteApplication = (e: React.MouseEvent, appId: string) => {
+  const handleDeleteApplication = async (e: React.MouseEvent, appId: string) => {
     e.stopPropagation();
     if (confirm(`${t("Are you sure you want to remove application")} ${appId}?`)) {
-      const updated = applications.filter((app) => app.applicationId !== appId);
-      sessionStorage.setItem("applications", JSON.stringify(updated));
-      setApplications(updated);
+      try {
+        const idToken = await getIdToken();
+        if (!idToken) return;
+
+        const res = await fetch(`/api/applications/${encodeURIComponent(appId)}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Failed to delete application.");
+        }
+
+        setApplications((prev) => prev.filter((app) => app.applicationId !== appId));
+      } catch (err: any) {
+        console.error("❌ Delete failed:", err);
+        alert(`Delete failed: ${err.message}`);
+      }
     }
   };
 

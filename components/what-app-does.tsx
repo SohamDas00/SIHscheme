@@ -59,7 +59,7 @@ export function WhatOurAppDoes() {
       secondaryIcon: Compass,
       tag: t("Geo-Spatial"),
       text: t("Find suitable banks and channel partners near your location"),
-      benefit: t("16+ verified PSBs, SCAs & RRBs with NPA filtering"),
+      benefit: t("16+ verified PSBs, SCAs & RRBs across major hubs"),
       href: "/assessment#partner-map-section",
     },
   ];

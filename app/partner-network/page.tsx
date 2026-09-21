@@ -13,6 +13,9 @@ import {
   ShieldCheck,
   CheckCircle2,
   RotateCcw,
+  Info,
+  Hourglass,
+  CircleCheck,
 } from "lucide-react";
 import { AppState, MatchedSchemeData } from "@/lib/app-state";
 import { Button } from "@/components/ui/button";
@@ -126,7 +129,7 @@ export default function PartnerNetworkPage() {
       const createdApp = data.application;
 
       const message =
-        `✅ Application Submitted & Persisted Successfully!\n\n` +
+        `Application Submitted & Persisted Successfully!\n\n` +
         `Application ID: ${createdApp.applicationId}\n` +
         `Scheme: ${createdApp.scheme}\n` +
         `Amount: ₹${createdApp.amount.toLocaleString("en-IN")}\n` +
@@ -137,7 +140,7 @@ export default function PartnerNetworkPage() {
       alert(message);
       window.location.href = "/my-applications";
     } catch (err: any) {
-      console.error("❌ Application submission failed:", err);
+      console.error("Application submission failed:", err);
       alert(`Submission Error: ${err.message || "Could not connect to database."}`);
     } finally {
       setSubmitting(false);
@@ -247,7 +250,7 @@ export default function PartnerNetworkPage() {
         {/* Helpful Guide Info Box */}
         <div className="mb-6 p-4 bg-aurora-50 dark:bg-aurora-900/20 border border-aurora-200 dark:border-aurora-700/50 rounded-xl text-card-foreground">
           <div className="flex items-start gap-3">
-            <span className="text-2xl">ℹ️</span>
+            <Info className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
             <div>
               <h4 className="font-bold text-slate-900 dark:text-white mb-1">{t("How to Apply")}</h4>
               <ol className="text-slate-600 dark:text-muted-foreground text-sm space-y-1">
@@ -289,7 +292,17 @@ export default function PartnerNetworkPage() {
               size="lg"
               className="bg-gradient-to-r from-aurora-600 to-teal-600 hover:from-aurora-700 hover:to-teal-700 text-white px-8 py-6 rounded-xl text-base sm:text-lg font-bold shadow-xl shadow-aurora-500/30 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-60"
             >
-              <span>{submitting ? "⏳ " + t("Persisting Application...") : "✅ " + t("Apply to This Scheme")}</span>
+              {submitting ? (
+                <>
+                  <Hourglass className="w-5 h-5 animate-spin" />
+                  <span>{t("Persisting Application...")}</span>
+                </>
+              ) : (
+                <>
+                  <CircleCheck className="w-5 h-5" />
+                  <span>{t("Apply to This Scheme")}</span>
+                </>
+              )}
             </Button>
           </div>
 

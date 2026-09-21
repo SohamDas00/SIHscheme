@@ -18,7 +18,8 @@ import {
   Percent,
   Trash2,
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  ClipboardList
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -63,7 +64,7 @@ export default function MyApplicationsPage() {
       const data = await res.json();
       setApplications(data.applications || []);
     } catch (err: any) {
-      console.error("❌ Failed to fetch applications:", err);
+      console.error("Failed to fetch applications:", err);
       setError(err.message || "Could not retrieve applications.");
     } finally {
       setIsLoaded(true);
@@ -108,7 +109,7 @@ export default function MyApplicationsPage() {
 
         setApplications((prev) => prev.filter((app) => app.applicationId !== appId));
       } catch (err: any) {
-        console.error("❌ Delete failed:", err);
+        console.error("Delete failed:", err);
         alert(`Delete failed: ${err.message}`);
       }
     }
@@ -170,7 +171,9 @@ export default function MyApplicationsPage() {
             <div className="bg-white/95 dark:bg-navy-800/90 border border-slate-200 dark:border-navy-700 rounded-2xl p-10 sm:p-14 text-center shadow-lg dark:shadow-2xl backdrop-blur-xl relative overflow-hidden text-card-foreground">
               <div className="h-1.5 w-full bg-gradient-to-r from-aurora-500 via-purple-500 to-teal-400 absolute top-0 left-0" />
               
-              <div className="text-6xl mb-4 animate-bounce">📋</div>
+              <div className="w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center mx-auto mb-4">
+                <ClipboardList className="w-8 h-8" />
+              </div>
               <h3 className="text-2xl font-bold text-foreground mb-2">
                 {t("No Applications Yet")}
               </h3>

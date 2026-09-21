@@ -92,7 +92,7 @@ export const getIdToken = async () => {
       return await auth.currentUser.getIdToken();
     }
   } catch (err) {
-    console.warn("⚠️ Failed to get Firebase ID Token:", err);
+    console.warn("Failed to get Firebase ID Token:", err);
   }
   return null;
 };

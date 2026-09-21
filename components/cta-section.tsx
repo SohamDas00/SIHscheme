@@ -1,27 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import {
   Sparkles,
   ArrowRight,
   Play,
   Check,
-  CheckCircle2,
-  ShieldCheck,
-  Zap,
-  RotateCcw,
-  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { isAuthenticated } from "@/lib/firebase";
 
 export function FinalCtaSection() {
   const { t } = useTranslation();
   const router = useRouter();
-  const [showDemoModal, setShowDemoModal] = useState(false);
 
   const handleStartAssessment = () => {
     const user = isAuthenticated();
@@ -29,16 +22,6 @@ export function FinalCtaSection() {
       router.push("/assessment");
     } else {
       router.push("/login");
-    }
-  };
-
-  const handleViewDemoClick = () => {
-    // Scroll to the top hero section preview or open quick modal
-    const heroPreview = document.getElementById("how-it-works");
-    if (heroPreview) {
-      heroPreview.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -87,15 +70,15 @@ export function FinalCtaSection() {
           </div>
 
           {/* Secondary Button: View Demo */}
-          <Button
-            size="lg"
-            variant="secondary"
-            onClick={handleViewDemoClick}
-            className="w-full sm:w-auto text-base font-semibold px-6 py-6 border-white/20 bg-white/10 hover:bg-white/20 text-white backdrop-blur gap-2 shadow-sm"
+          <a
+            href="https://youtu.be/DDYcMwEmopg"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-8 py-4 bg-navy-800 hover:bg-navy-700 text-white font-semibold rounded-lg border border-navy-700 transition-all flex items-center justify-center gap-3 shadow-sm cursor-pointer"
           >
-            <Play className="h-4 w-4 text-teal-300 fill-teal-300/30" />
+            <Play className="w-5 h-5 text-teal-300 fill-teal-300/30" />
             <span>{t("View Demo")}</span>
-          </Button>
+          </a>
         </div>
 
         {/* Trust Badges */}

@@ -112,8 +112,8 @@ export function Navbar() {
                     <Image
                       src={currentUser.photo}
                       alt={currentUser.name}
-                      width={36}  // 👈 Add this
-                      height={36} // 👈 Add this
+                      width={36}
+                      height={36}
                       className="w-9 h-9 rounded-full border-2 border-aurora-500 object-cover"
                       unoptimized
                     />
@@ -172,8 +172,8 @@ export function Navbar() {
                   <Image
                     src={currentUser.photo}
                     alt={currentUser.name}
-                    width={36}  // 👈 Add this
-                    height={36} // 👈 Add this
+                    width={36}
+                    height={36}
                     className="w-9 h-9 rounded-full border-2 border-aurora-500 object-cover"
                     unoptimized
                   />

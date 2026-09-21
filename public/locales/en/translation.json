@@ -73,8 +73,8 @@
   },
   "matchedScheme": {
     "title": "Matched Scheme",
-    "eligibleBadge": "✅ Eligible & Matched",
-    "notEligibleBadge": "❌ Not Eligible",
+    "eligibleBadge": "Eligible & Matched",
+    "notEligibleBadge": "Not Eligible",
     "notEligibleMessage": "Annual income exceeds ₹5.00 Lakhs limit",
     "schemeName": "Scheme Name",
     "interestRate": "Interest Rate",

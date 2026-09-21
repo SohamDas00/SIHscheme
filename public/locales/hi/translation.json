@@ -73,8 +73,8 @@
   },
   "matchedScheme": {
     "title": "मिलान योजना",
-    "eligibleBadge": "✅ पात्र और मिलान",
-    "notEligibleBadge": "❌ पात्र नहीं",
+    "eligibleBadge": "पात्र और मिलान",
+    "notEligibleBadge": "पात्र नहीं",
     "notEligibleMessage": "वार्षिक आय ₹5.00 लाख सीमा से अधिक है",
     "schemeName": "योजना का नाम",
     "interestRate": "ब्याज दर",

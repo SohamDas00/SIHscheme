@@ -17,7 +17,11 @@ import {
   AlertTriangle,
   Award,
   BookOpen,
-  Briefcase
+  Briefcase,
+  User,
+  ShieldCheck,
+  Trophy,
+  Activity
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
@@ -341,7 +345,7 @@ export default function MatchedSchemePage() {
           {/* Interactive Flow Nodes */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 text-[11px] font-medium">
             <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-navy-950/60 border border-slate-200 dark:border-navy-800 text-center space-y-1">
-              <span className="text-xs">👤</span>
+              <User className="w-4 h-4 mx-auto text-teal-600 dark:text-teal-400" />
               <span className="font-bold text-slate-800 dark:text-slate-200 block">{t("1. User Profile")}</span>
               <span className="text-[10px] text-muted-foreground block truncate">
                 {assessment?.loanPurpose || "Requirement"}
@@ -349,13 +353,13 @@ export default function MatchedSchemePage() {
             </div>
 
             <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-navy-950/60 border border-slate-200 dark:border-navy-800 text-center space-y-1">
-              <span className="text-xs">✨</span>
+              <Sparkles className="w-4 h-4 mx-auto text-teal-600 dark:text-teal-400" />
               <span className="font-bold text-slate-800 dark:text-slate-200 block">{t("2. Embeddings")}</span>
               <span className="text-[10px] text-muted-foreground block font-mono">1536-dim vector</span>
             </div>
 
             <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-navy-950/60 border border-slate-200 dark:border-navy-800 text-center space-y-1">
-              <span className="text-xs">📐</span>
+              <Activity className="w-4 h-4 mx-auto text-teal-600 dark:text-teal-400" />
               <span className="font-bold text-slate-800 dark:text-slate-200 block">{t("3. Cosine Sim")}</span>
               <span className="text-[10px] text-teal-600 dark:text-teal-400 font-bold block font-mono">
                 {scheme?.aiMatchScore ? `${scheme.aiMatchScore}% Score` : "Matched"}
@@ -363,15 +367,15 @@ export default function MatchedSchemePage() {
             </div>
 
             <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-navy-950/60 border border-slate-200 dark:border-navy-800 text-center space-y-1">
-              <span className="text-xs">🛡️</span>
+              <ShieldCheck className="w-4 h-4 mx-auto text-teal-600 dark:text-teal-400" />
               <span className="font-bold text-slate-800 dark:text-slate-200 block">{t("4. Hard Rules")}</span>
               <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">
-                {scheme?.isEligible ? "✓ Eligible" : "✗ Knockout"}
+                {scheme?.isEligible ? t("Eligible") : t("Knockout")}
               </span>
             </div>
 
             <div className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/30 text-center space-y-1">
-              <span className="text-xs">🏆</span>
+              <Trophy className="w-4 h-4 mx-auto text-teal-600 dark:text-teal-400" />
               <span className="font-bold text-teal-700 dark:text-teal-300 block">{t("5. Ranking")}</span>
               <span className="text-[10px] text-teal-600 dark:text-teal-400 font-bold block">Top 3 Schemes</span>
             </div>
@@ -417,8 +421,9 @@ export default function MatchedSchemePage() {
                 <XCircle className="h-8 w-8" />
               </div>
               <div className="space-y-1">
-                <div className="inline-flex items-center gap-2 bg-destructive/20 border border-destructive text-destructive px-4 py-1.5 rounded-full text-xs font-bold">
-                  {creditDecision?.flag === "RED" ? `❌ ${t("Underwriting Auto-Decline")}` : `✗ ${t("Statutory Limit Exceeded")}`}
+                <div className="inline-flex items-center gap-1.5 bg-destructive/20 border border-destructive text-destructive px-4 py-1.5 rounded-full text-xs font-bold">
+                  <XCircle className="w-3.5 h-3.5" />
+                  <span>{creditDecision?.flag === "RED" ? t("Underwriting Auto-Decline") : t("Statutory Limit Exceeded")}</span>
                 </div>
                 <h2 className="text-2xl font-bold text-foreground">
                   {creditDecision?.flag === "RED" ? t("Application Declined by Credit Policy") : t("Not Eligible for Concessional Lending")}
@@ -430,8 +435,9 @@ export default function MatchedSchemePage() {
             {/* Hard Knockout Explanation */}
             <div className="p-4 rounded-xl bg-slate-900/80 border border-destructive/30 space-y-3 text-xs">
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="font-bold text-destructive uppercase tracking-wider">
-                  🛡️ {t("Hard Eligibility Knockout Rule Enforcement")}
+                <span className="font-bold text-destructive uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-destructive" />
+                  <span>{t("Hard Eligibility Knockout Rule Enforcement")}</span>
                 </span>
                 <span className="text-[11px] text-amber-400 font-mono">
                   {t("AI Overrides: FORBIDDEN")}
@@ -472,8 +478,9 @@ export default function MatchedSchemePage() {
                 {/* Clean, Wrap-Enabled Badges Bar */}
                 <div className="flex flex-wrap items-center gap-2">
                   {/* BEST MATCH BADGE */}
-                  <Badge className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold px-3 py-1 text-xs shadow-md">
-                    🏆 {t("BEST MATCH")}
+                  <Badge className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold px-3 py-1 text-xs shadow-md flex items-center gap-1.5">
+                    <Trophy className="w-3.5 h-3.5" />
+                    <span>{t("BEST MATCH")}</span>
                   </Badge>
 
                   {/* AI MATCH SCORE BADGE */}
@@ -543,13 +550,13 @@ export default function MatchedSchemePage() {
 
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 dark:text-slate-300">
                   {(scheme.reasons && scheme.reasons.length > 0 ? scheme.reasons : [
-                    `✓ Purpose is semantically aligned with the scheme profile`,
-                    `✓ Income satisfies statutory requirement (₹${assessment?.income.toLocaleString('en-IN')})`,
-                    `✓ Requested amount is within the scheme limit (₹${assessment?.loanAmount.toLocaleString('en-IN')})`,
-                    `✓ Applicant category matches target beneficiary criteria`
+                    `Purpose is semantically aligned with the scheme profile`,
+                    `Income satisfies statutory requirement (₹${assessment?.income.toLocaleString('en-IN')})`,
+                    `Requested amount is within the scheme limit (₹${assessment?.loanAmount.toLocaleString('en-IN')})`,
+                    `Applicant category matches target beneficiary criteria`
                   ]).map((reason, idx) => (
                     <li key={idx} className="flex items-start gap-2 p-2 rounded-lg bg-white dark:bg-navy-900/50 border border-slate-200/60 dark:border-navy-800">
-                      <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                       <span>{t(reason)}</span>
                     </li>
                   ))}

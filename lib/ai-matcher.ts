@@ -188,7 +188,7 @@ export function evaluateSchemeEligibility(
     return {
       eligible: false,
       reasons: [
-        `❌ Annual family income (₹${profile.income.toLocaleString("en-IN")}) exceeds statutory ceiling (₹${scheme.incomeLimit.toLocaleString("en-IN")})`
+        `Annual family income (₹${profile.income.toLocaleString("en-IN")}) exceeds statutory ceiling (₹${scheme.incomeLimit.toLocaleString("en-IN")})`
       ],
       knockoutFailure: "INCOME_CEILING_EXCEEDED"
     };
@@ -199,7 +199,7 @@ export function evaluateSchemeEligibility(
     return {
       eligible: false,
       reasons: [
-        `❌ Requested amount (₹${profile.loanAmount.toLocaleString("en-IN")}) exceeds maximum scheme limit (₹${scheme.maxLoanAmount.toLocaleString("en-IN")})`
+        `Requested amount (₹${profile.loanAmount.toLocaleString("en-IN")}) exceeds maximum scheme limit (₹${scheme.maxLoanAmount.toLocaleString("en-IN")})`
       ],
       knockoutFailure: "LOAN_AMOUNT_EXCEEDED"
     };
@@ -210,7 +210,7 @@ export function evaluateSchemeEligibility(
     return {
       eligible: false,
       reasons: [
-        `❌ Credit profile does not meet minimum institutional lending policy guidelines.`
+        `Credit profile does not meet minimum institutional lending policy guidelines.`
       ],
       knockoutFailure: "CREDIT_POLICY_KNOCKOUT"
     };
@@ -222,24 +222,24 @@ export function evaluateSchemeEligibility(
     if (scheme.purposeCategory === "education" && userPurpose === "business") {
       return {
         eligible: false,
-        reasons: [`❌ Scheme is restricted to educational and academic pursuits.`],
+        reasons: [`Scheme is restricted to educational and academic pursuits.`],
         knockoutFailure: "PURPOSE_INCOMPATIBLE"
       };
     }
     if (scheme.purposeCategory === "business" && userPurpose === "education") {
       return {
         eligible: false,
-        reasons: [`❌ Scheme is restricted to business and self-employment ventures.`],
+        reasons: [`Scheme is restricted to business and self-employment ventures.`],
         knockoutFailure: "PURPOSE_INCOMPATIBLE"
       };
     }
   }
 
   // Grounded verification points for eligible schemes
-  reasons.push(`✓ Business/purpose is semantically aligned with the scheme profile`);
-  reasons.push(`✓ Annual family income (₹${profile.income.toLocaleString("en-IN")}) satisfies the statutory ₹${scheme.incomeLimit.toLocaleString("en-IN")} limit`);
-  reasons.push(`✓ Requested loan amount (₹${profile.loanAmount.toLocaleString("en-IN")}) is within the scheme limit of ₹${scheme.maxLoanAmount.toLocaleString("en-IN")}`);
-  reasons.push(`✓ Applicant profile matches target beneficiary category: ${scheme.targetBeneficiaries}`);
+  reasons.push(`Business/purpose is semantically aligned with the scheme profile`);
+  reasons.push(`Annual family income (₹${profile.income.toLocaleString("en-IN")}) satisfies the statutory ₹${scheme.incomeLimit.toLocaleString("en-IN")} limit`);
+  reasons.push(`Requested loan amount (₹${profile.loanAmount.toLocaleString("en-IN")}) is within the scheme limit of ₹${scheme.maxLoanAmount.toLocaleString("en-IN")}`);
+  reasons.push(`Applicant profile matches target beneficiary category: ${scheme.targetBeneficiaries}`);
 
   return {
     eligible: true,

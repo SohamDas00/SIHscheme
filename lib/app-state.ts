@@ -88,16 +88,26 @@ export interface ApplicationTimelineStep {
 
 export interface ApplicationRecord {
   applicationId: string;
+  id?: string | number;
   userId?: string;
   userEmail?: string | null;
   schemeId?: string;
   scheme: string;
+  schemeName?: string;
   amount: number;
+  loanAmount?: number;
   interestRate: string | number;
   interestRateText?: string;
+  tenureMonths?: number;
+  tenureYears?: number;
+  emi?: number;
+  totalInterest?: number;
+  totalPayment?: number;
+  channelPartner?: string;
   purpose: string;
-  status: "Submitted" | "Under Review" | "Documents Verified" | "Approved" | "Loan Approved" | "Disbursed" | "Rejected" | string;
+  status: "Submitted" | "Under Review" | "Documents Verified" | "Approved" | "Loan Approved" | "Disbursed" | "Rejected" | "approved" | "pending" | "rejected" | string;
   submittedDate: string;
+  appliedDate?: string;
   timeline: ApplicationTimelineStep[];
   createdAt?: string;
   updatedAt?: string;
@@ -112,6 +122,11 @@ export const AppState = {
       };
       sessionStorage.setItem("schemebridge_assessment", JSON.stringify(payload));
       sessionStorage.setItem("assessment", JSON.stringify(payload));
+      try {
+        window.dispatchEvent(new CustomEvent("assessmentSubmitted", { detail: payload }));
+      } catch (e) {
+        // ignore
+      }
     }
   },
 
@@ -189,6 +204,11 @@ export const AppState = {
       sessionStorage.removeItem("schemebridge_matched_scheme");
       sessionStorage.removeItem("creditDecision");
       sessionStorage.removeItem("schemebridge_credit_decision");
+      try {
+        window.dispatchEvent(new CustomEvent("assessmentSubmitted", { detail: null }));
+      } catch (e) {
+        // ignore
+      }
     }
   },
 

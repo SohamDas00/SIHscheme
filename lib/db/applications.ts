@@ -32,16 +32,26 @@ export interface ApplicationTimelineStep {
 
 export interface ApplicationRecord {
   applicationId: string;
+  id?: string | number;
   userId: string;
   userEmail?: string | null;
   schemeId: string;
   scheme: string;
+  schemeName?: string;
   amount: number;
+  loanAmount?: number;
   interestRate: number | string;
   interestRateText: string;
+  tenureMonths?: number;
+  tenureYears?: number;
+  emi?: number;
+  totalInterest?: number;
+  totalPayment?: number;
+  channelPartner?: string;
   purpose: string;
-  status: "Submitted" | "Under Review" | "Documents Verified" | "Approved" | "Loan Approved" | "Disbursed" | "Rejected" | string;
+  status: "Submitted" | "Under Review" | "Documents Verified" | "Approved" | "Loan Approved" | "Disbursed" | "Rejected" | "approved" | "pending" | "rejected" | string;
   submittedDate: string;
+  appliedDate?: string;
   timeline: ApplicationTimelineStep[];
   createdAt: string;
   updatedAt: string;

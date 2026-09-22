@@ -16,6 +16,7 @@ import {
   HelpCircle,
   Building,
   GraduationCap,
+  Lock,
 } from "lucide-react";
 import {
   PieChart,
@@ -260,7 +261,7 @@ export function EmiCalculator({
               </button>
             </div>
 
-            {/* Input 1: Loan Amount (Auto-filled & Editable) */}
+            {/* Input 1: Loan Amount (Fixed from Assessment) */}
             <div className="space-y-2 p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-navy-700 bg-slate-50/80 dark:bg-navy-900/60 shadow-sm">
               <div className="flex items-center justify-between">
                 <label
@@ -270,7 +271,8 @@ export function EmiCalculator({
                   <IndianRupee className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                   <span>{t("Loan Amount (Principal)")}</span>
                 </label>
-                <span className="text-xs font-extrabold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-500/15 border border-teal-200 dark:border-teal-500/30 px-3 py-1 rounded-full font-mono shadow-sm">
+                <span className="text-xs font-extrabold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-500/15 border border-teal-200 dark:border-teal-500/30 px-3 py-1 rounded-full font-mono shadow-sm flex items-center gap-1.5">
+                  <Lock className="h-3 w-3 text-teal-600 dark:text-teal-400" />
                   ₹ {formatIndianCurrency(loanAmount)}
                 </span>
               </div>
@@ -282,33 +284,22 @@ export function EmiCalculator({
                 <Input
                   id="calc-loan-amount"
                   type="number"
-                  min="10000"
-                  max="10000000"
-                  step="5000"
+                  readOnly
                   value={loanAmount}
-                  onChange={(e) => setLoanAmount(Math.max(0, Number(e.target.value)))}
-                  className="pl-9 text-base py-5 font-bold font-mono bg-white dark:bg-navy-950 border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white shadow-sm"
+                  className="pl-9 pr-10 text-base py-5 font-bold font-mono bg-slate-100/90 dark:bg-navy-950/80 border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white shadow-sm cursor-not-allowed select-none"
                 />
+                <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                  <Lock className="h-4 w-4" />
+                </div>
               </div>
 
-              {/* Slider for Loan Amount */}
-              <input
-                type="range"
-                min="10000"
-                max={purpose === "business" ? "5000000" : "2000000"}
-                step="10000"
-                value={loanAmount}
-                onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-navy-950 rounded-lg appearance-none cursor-pointer accent-teal-600"
-              />
-
-              <div className="flex justify-between text-[11px] text-slate-600 dark:text-slate-400 font-medium">
-                <span>{t("Min")}: ₹10,000</span>
-                <span>{t("Max")}: ₹{purpose === "business" ? "50.00L" : "20.00L"}</span>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium pt-0.5">
+                <Lock className="h-3 w-3 text-teal-600 dark:text-teal-400 shrink-0" />
+                <span>{t("Fixed from user assessment (90% scheme government share)")}</span>
               </div>
             </div>
 
-            {/* Input 2: Interest Rate (% p.a.) */}
+            {/* Input 2: Interest Rate (% p.a.) (Fixed from Matched Scheme) */}
             <div className="space-y-2 p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-navy-700 bg-slate-50/80 dark:bg-navy-900/60 shadow-sm">
               <div className="flex items-center justify-between">
                 <label
@@ -318,7 +309,8 @@ export function EmiCalculator({
                   <Percent className="h-4 w-4 text-aurora-600 dark:text-aurora-400" />
                   <span>{t("Annual Interest Rate (% p.a.)")}</span>
                 </label>
-                <span className="text-xs font-extrabold text-aurora-800 dark:text-aurora-300 bg-aurora-50 dark:bg-aurora-500/15 border border-aurora-200 dark:border-aurora-500/30 px-3 py-1 rounded-full font-mono shadow-sm">
+                <span className="text-xs font-extrabold text-aurora-800 dark:text-aurora-300 bg-aurora-50 dark:bg-aurora-500/15 border border-aurora-200 dark:border-aurora-500/30 px-3 py-1 rounded-full font-mono shadow-sm flex items-center gap-1.5">
+                  <Lock className="h-3 w-3 text-aurora-600 dark:text-aurora-400" />
                   {interestRate}% p.a.
                 </span>
               </div>
@@ -330,30 +322,18 @@ export function EmiCalculator({
                 <Input
                   id="calc-interest-rate"
                   type="number"
-                  min="1"
-                  max="25"
-                  step="0.1"
+                  readOnly
                   value={interestRate}
-                  onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                  className="pl-9 text-base py-5 font-bold font-mono bg-white dark:bg-navy-950 border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white shadow-sm"
+                  className="pl-9 pr-10 text-base py-5 font-bold font-mono bg-slate-100/90 dark:bg-navy-950/80 border-slate-200 dark:border-navy-700 text-slate-900 dark:text-white shadow-sm cursor-not-allowed select-none"
                 />
+                <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                  <Lock className="h-4 w-4" />
+                </div>
               </div>
 
-              {/* Slider for Rate */}
-              <input
-                type="range"
-                min="4"
-                max="15"
-                step="0.25"
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-navy-950 rounded-lg appearance-none cursor-pointer accent-aurora-600"
-              />
-
-              <div className="flex justify-between text-[11px] text-slate-600 dark:text-slate-400 font-medium">
-                <span>{t("Subsidized: 4.0%")}</span>
-                <span>{t("Standard: 7.5%")}</span>
-                <span>{t("Commercial: 12.0%")}</span>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium pt-0.5">
+                <Lock className="h-3 w-3 text-aurora-600 dark:text-aurora-400 shrink-0" />
+                <span>{t("Fixed from matched concessional scheme rate")}</span>
               </div>
             </div>
 

@@ -63,7 +63,7 @@ export function Navbar() {
                 SchemeBridge
               </span>
               <Badge variant="glow" className="text-[10px] font-medium py-0 px-2 hidden sm:inline-flex border-aurora-500/30 text-aurora-600 dark:text-aurora-300 bg-aurora-500/10">
-                DesiDevs
+                DesiDevs_Surtech
               </Badge>
             </div>
           </Link>

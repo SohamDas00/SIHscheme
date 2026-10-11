@@ -1,36 +1,213 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌉 SchemeBridge — AI-Driven Scheme Matching Platform
 
-## Getting Started
+> Find smarter. Match better. Apply with confidence.
 
-First, run the development server:
+🌐 **Live Demo:** [Click here to enjoy Live Demo](https://sih-ai-xi.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+SchemeBridge is an AI-assisted digital platform developed by **Team DesiDevs_SurTech** for **Smart India Hackathon 2026**.
+
+The platform helps entrepreneurs and applicants discover relevant government-backed concessional credit schemes through **AI-powered semantic matching, deterministic eligibility validation, financial planning, partner discovery, secure application submission, and persistent application tracking**.
+
+---
+
+## ✨ Features
+
+- 🧠 **AI-Assisted Scheme Matching** — Uses text embeddings and cosine similarity to identify schemes that are semantically relevant to the user's requirements.
+
+- 🔍 **Deterministic Eligibility Validation** — Applies rule-based checks for income, category, loan limits, and other scheme-specific eligibility constraints.
+
+- 📊 **Scheme Relevance Ranking** — Combines semantic relevance with eligibility results to present the most suitable eligible schemes.
+
+- 🌐 **Bilingual Interface** — Provides an English and Hindi interface with simplified labels for improved accessibility.
+
+- 💰 **Financial Planning & EMI Calculator** — Helps users understand funding contribution, interest, loan amount, repayment period, EMI, and applicable moratorium parameters.
+
+- 📈 **Financial Visualization** — Uses interactive charts to present EMI, funding contribution, interest, and repayment information.
+
+- 📍 **Data-Driven Partner Discovery** — Helps users identify relevant channel partners using partner type, geographic proximity, scheme availability, and available institutional information.
+
+- 📤 **Secure Application Submission** — Allows authenticated users to submit applications and persist application details.
+
+- 📑 **Persistent Application Timeline** — Stores application records and workflow milestones in PostgreSQL so authenticated users can revisit their application progress.
+
+- 🔐 **Authenticated APIs** — Uses Firebase Authentication and server-side token verification to protect user-specific application data.
+
+- 📱 **Responsive Interface** — Designed for desktop and mobile web access.
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technologies |
+|---|---|
+| **Frontend** | Next.js 14+, React, TypeScript |
+| **Styling** | Tailwind CSS, shadcn/ui |
+| **AI / Semantic Matching** | OpenRouter Embeddings, Text Embeddings, Cosine Similarity |
+| **Embedding Model** | `openai/text-embedding-3-small` |
+| **API Layer** | Next.js REST API Routes |
+| **Authentication** | Firebase Authentication, Token Verification |
+| **Database** | Supabase PostgreSQL |
+| **Data Visualization** | Recharts |
+| **Maps & GIS** | Leaflet, React-Leaflet, OpenStreetMap |
+| **Geolocation** | Browser Geolocation API |
+| **State & Client Persistence** | Session Storage API |
+| **Deployment** | GitHub, Vercel |
+
+---
+
+## 🚀 How It Works
+
+```text
+User Requirements
+        ↓
+AI Semantic Matching
+        ↓
+Text Embedding + Cosine Similarity
+        ↓
+Eligibility Hard Filter
+        ↓
+Top Eligible Schemes
+        ↓
+Financial Planning
+        ↓
+Partner Discovery
+        ↓
+Application Submission
+        ↓
+Supabase PostgreSQL
+        ↓
+Persistent Application Timeline
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🧠 Hybrid AI + Rules Approach
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+SchemeBridge uses a two-stage matching architecture:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+User Profile & Requirements
+            ↓
+     Text Embedding
+            ↓
+    Cosine Similarity
+            ↓
+ Semantic Relevance Score
+            ↓
+ Deterministic Eligibility
+        Hard Filter
+            ↓
+    Eligible Schemes
+            ↓
+     Scheme Ranking
+            ↓
+ Top Eligible Recommendations
+```
 
-## Learn More
+**Semantic matching identifies relevant schemes, while deterministic rules enforce hard eligibility constraints.**
 
-To learn more about Next.js, take a look at the following resources:
+### 🔄 Application Flow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+User Requirements
+        ↓
+AI Semantic Matching
+        ↓
+Text Embedding + Cosine Similarity
+        ↓
+Eligibility Hard Filter
+        ↓
+Top Eligible Schemes
+        ↓
+Application
+        ↓
+Supabase PostgreSQL
+        ↓
+Persistent Timeline
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 💻 Run Locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Prerequisites
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Node.js 18.17.0 or higher
+- npm
+- Git
+
+### Steps
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/Subahdip/SchemeBridge.git
+   cd SchemeBridge
+   ```
+
+2. **Install Dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start the Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Open the Application**
+
+   Open:
+
+   ```text
+   http://localhost:3000
+   ```
+
+---
+
+## ☁️ Deployment
+
+SchemeBridge is deployed using **Vercel**.
+
+The deployment workflow is:
+
+```text
+GitHub Repository
+        ↓
+      Vercel
+        ↓
+  Next.js Build
+        ↓
+Production Deployment
+```
+
+### 🌐 Live Application
+
+**SchemeBridge:** [Try SchemeBridge](https://sih-ai-xi.vercel.app/)
+
+---
+
+## 👨‍💻 Team DesiDevs
+
+Developed with ❤️ by **Team DesiDevs_SurTech**.
+
+### 🌉 SchemeBridge
+
+> **Bridging Citizens to Government Opportunities.**
+
+**Theme:** Smart Automation  
+**Category:** Software  
+
+---
+
+## ⭐ Support
+
+If you like **SchemeBridge**, consider giving the repository a ⭐ on GitHub.
+
+### 🔗 Project Links
+
+**Live Demo:**  
+[Try Prototype](https://sih-ai-xi.vercel.app/)
+
+**GitHub Repository:**  
+[Click here to the see SchemeBridge Repository](https://github.com/Subahdip/SchemeBridge)
